@@ -1,70 +1,84 @@
-# Getting Started with Create React App
+# Remedy
+### An integrated software solution for superspeciality clinics to connect between patients, doctors, and labs.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Modules
+### Module 1: Authentication
+The authentication module deals with the admin, patient, doctor, and lab’s account creation, password reset, login, and logout.
+### Module 2: Patients
+The Patients module contains their pages, functionalities, and other basic data models.
+### Module 3: Doctors and Labs
+This module deals with Doctors, and Laboratories. Contains their pages, functionalities, and other basic data models.
+### Module 4: Executives
+The executives module deals with the management of the system, and approval of doctors and laboratories.
+### Module 5: Appointments
+The appointments module deals with management of appointments. It also supplies real-time information on time-slot availability
+### Module 6: Payments
+The payments module deals with the processing of payments for appointments. It stores required information related to payments as well.
+### Module 7: Reports
+The reports module deals with the generation of reports, especially creating lab reports, prescriptions, other relevant data storage as well.
+### Module 8: Video call
+This module deals with all video call related APIs, settings, keys, etc.
+### Module 9: Chat
+This module deals with all chat related APIs, settings, keys, etc.
 
-## Available Scripts
 
-In the project directory, you can run:
+## Prerequisites:
+I am using VSCode for my development and its integrated terminal. Any IDE and command prompt is enough.
+I have enabled 'autosave features'. So, 'save' won't be mentioned in the follwing instructions.
 
-### `npm start`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+# React
+Created a new react app using:
+```
+npx create-react-app frontend
+```
+Create .env file and add details
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+From frontend directory, install react-redux, redux, react router dom, react-bootstrap reactstrap, bootstrap. I have installed reactstrap and react-bootstrap. This is not necessory. I have started with reactstrap, at one point of time, I felt it was limiting and installed react-bootstrap. 
 
-### `npm test`
+```
+npm install react-redux redux react-router-dom reactstrap react-bootstrap bootstrap
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Install SASS related dependencies, formik and yup for form state management
+```
+npm install sass-loader node-sass css-loader style-loader postcss-loader formik yup
+```
 
-### `npm run build`
+Install react-table, axios to send http request to backend and collect data, date fns for getting date related data, react toastify for pop-up messages, razorpay package, .env to load keys directly from .env file, formik for form validation, react scrollbar, Pusher for chat, react drop-zone, JWT Decode for decoding accessToken, moment for time related actions.
+```
+npm install react-table axios date-fns react-toastify razorpay dotenv formik react-perfect-scrollbar pusher-js react-dropzone jwt-decode moment
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Thanks to:
 
-### `npm run eject`
+Attributions:
+Profile icon:
+<a href="https://www.flaticon.com/free-icons/user" title="user icons">User icons created by Freepik - Flaticon</a>
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Doctor prescription:
+<a href="https://storyset.com/health">Health illustrations by Storyset</a>
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Lab test selection:
+<a href="https://storyset.com/analysis">Analysis illustrations by Storyset</a>
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+Doctor :
+<a href="https://storyset.com/work">Work illustrations by Storyset</a>
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+Lab test:
+<a href="https://storyset.com/analysis">Analysis illustrations by Storyset</a>
 
-## Learn More
+Online Doctor:
+<a href="https://storyset.com/work">Work illustrations by Storyset</a>
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Green successful tick:
+<a href="https://www.flaticon.com/free-icons/correct" title="correct icons">Correct icons created by kliwir art - Flaticon</a>
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Linkedin logo:
+<a href="https://www.flaticon.com/free-icons/linkedin" title="linkedin icons">Linkedin icons created by riajulislam - Flaticon</a>
 
-### Code Splitting
+Github logo:
+<a href="https://www.flaticon.com/free-icons/github" title="github icons">Github icons created by riajulislam - Flaticon</a>
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
