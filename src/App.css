@@ -36,3 +36,39 @@
     transform: rotate(360deg);
   }
 }
+
+#page-header {
+  background-color: white;
+}
+
+#page-footer {
+  background-color: white;
+}
+
+.big-card-container {
+  margin: 0 auto;
+}
+
+.small-cards{
+  background-color: white;
+}
+
+.time-selection-button{
+  margin: 1px;
+}
+
+.hand-cursor{
+  cursor: pointer;
+}
+
+.profile-image{
+  width: 10vw;
+}
+
+.dashboard-icon{
+  width: 10vw;
+}
+
+.intent{
+  margin-left: 20px;
+}
