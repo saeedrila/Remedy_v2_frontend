@@ -82,3 +82,5 @@ Linkedin logo:
 Github logo:
 <a href="https://www.flaticon.com/free-icons/github" title="github icons">Github icons created by riajulislam - Flaticon</a>
 
+Blood Test icon:
+<a href="https://www.flaticon.com/free-icons/check" title="check icons">Check icons created by Freepik - Flaticon</a>

@@ -21,6 +21,7 @@ const DOCTOR_SPECIALIZATION_GENERIC ='/doctor-specialization-generic-url'
 
 function DoctorSpecialties() {
   const [specializationDetails, setSpecializationDetails] = useState([]);
+  const navigate = useNavigate();
 
   const fetchDoctorSpecializationData = async () => {
     try {
@@ -31,7 +32,7 @@ function DoctorSpecialties() {
         img: pic1
       }));
       setSpecializationDetails(updatedSpecializations)
-      console.log('Doctors specializations: ', updatedSpecializations)
+      // console.log('Doctors specializations: ', updatedSpecializations)
     } catch(error) {
       console.error('Error fetching data', error)
     }
@@ -40,8 +41,7 @@ function DoctorSpecialties() {
     fetchDoctorSpecializationData();
   }, []);
 
-  const navigate = useNavigate();
-
+  
 
   return (
     <>

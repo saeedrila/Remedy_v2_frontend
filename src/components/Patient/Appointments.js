@@ -31,7 +31,8 @@ function Appointments({ triggerFetch }) {
           Authorization: `Bearer ${accessToken}`,
         },
       });
-      setPatientAppointmentList(response.data)
+      setPatientAppointmentList(response.data);
+      console.log('Patient Appointment List: ', response.data);
     } catch (error){
       console.error('Error fetching data', error)
     }
@@ -125,7 +126,7 @@ function Appointments({ triggerFetch }) {
                       <td>{appointment.date}</td>
                       <td>{appointment.time}</td>
                       <td>{appointment.slot_type}</td>
-                      <td>{appointment.doctor_email}</td>
+                      <td>{appointment.email}</td>
                       <td>{appointment.appointment_id}</td>
                       <td>{appointment.status}</td>
                       <td><Button 

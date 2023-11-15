@@ -16,18 +16,19 @@ import axios from '../../api/axios'
 import { ToastContainer, toast } from 'react-toastify'
 
 // API Endpoints
-const GET_ACCOUNT_DETAILS = '/get-doctor-account-details'
-const UPDATE_ACCOUNT_DETAILS = '/get-doctor-account-details'
-const DOCTOR_SPECIALIZATION_SPECIFIC ='/doctor-specialization-specific'
-const DOCTOR_SPECIALIZATION_GENERIC ='/doctor-specialization-generic-url'
+const GET_ACCOUNT_DETAILS = '/get-lab-account-details'
+const UPDATE_ACCOUNT_DETAILS = '/get-lab-account-details'
+const LAB_SPECIFIC_TEST ='/get-lab-specific-test'
+const LAB_TEST_ADD ='/lab-test-add-url'
 
-function AccountDoctor({ triggerFetch }) {
+function AccountLab({ triggerFetch }) {
   const [accountDetails, setAccountDetails] = useState([]);
-  const [specializationDetails, setSpecializationDetails] = useState([]);
-  const [doctorSpecificSpecialization, setDoctorSpecificSpecialization] = useState([]);
-  const [new_specialization, setNewSpecialization] = useState('');
+  const [testDetails, setTestDetails] = useState([]);
+  const [labSpecificTest, setLabSpecificTest] = useState([]);
+  const [newTest, setNewTest] = useState('');
+  const [newCost, setNewCost] = useState('');
 
-  const [changeSpecializationModalShow, setChangeSpecializationModalShow] = useState(false)
+  const [changeTestModalShow, setChangeTestModalShow] = useState(false)
   const [uploadDocumentModalShow, setUploadDocumentModalShow] = useState(false)
   const [accountEditModalShow, setAccountEditModalShow] = useState(false)
   
@@ -45,43 +46,43 @@ function AccountDoctor({ triggerFetch }) {
       console.error('Error fetching data', error)
     }
   }
-  const fetchDoctorSpecializationData = async () => {
+  const fetchLabTestData = async () => {
     try {
       const accessToken = localStorage.getItem('accessToken');
-      const response = await axios.get(DOCTOR_SPECIALIZATION_GENERIC, {
+      const response = await axios.get(LAB_TEST_ADD, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
       })
-      setSpecializationDetails(response.data)
-      // console.log('Doctors specializations: ', response.data)
+      setTestDetails(response.data)
+      // console.log('Lab Tests: ', response.data)
     } catch(error) {
       console.error('Error fetching data', error)
     }
   }
-  const fetchDoctorSpecificSpecialization = async () => {
+  const fetchLabSpecificTest = async () => {
     try {
       const accessToken = localStorage.getItem('accessToken');
-      const response = await axios.get(DOCTOR_SPECIALIZATION_SPECIFIC, {
+      const response = await axios.get(LAB_SPECIFIC_TEST, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
       })
-      setDoctorSpecificSpecialization(response.data)
-      // console.log('Doctors specializations: ', response.data)
+      setLabSpecificTest(response.data)
+      // console.log('Lab Tests: ', response.data)
     } catch(error) {
       console.error('Error fetching data', error)
     }
   }
   useEffect(() => {
     fetchAccountData();
-    fetchDoctorSpecializationData();
-    fetchDoctorSpecificSpecialization();
+    fetchLabTestData();
+    fetchLabSpecificTest();
   }, [triggerFetch]);
 
   // Form data storage
   const [formData, setFormData] = useState({
-    fee_per_session: accountDetails.fee_per_session || '',
+    fee_per_test: accountDetails.fee_per_test || '',
     experience: accountDetails.experience || '',
     description: accountDetails.description || '',
   })
@@ -119,34 +120,45 @@ function AccountDoctor({ triggerFetch }) {
     setAccountEditModalShow(false)
   }
 
-  // Specialization edit modal
-  const handleInputChangeSpecializationEdit = (e) => {
-    setNewSpecialization(e.target.value);
+  // Test edit modal
+  const handleInputChangeTestEdit = (e, fieldName) => {
+    const inputValue = e.target.value;
+    if (fieldName === 'newTest') {
+      setNewTest(inputValue);
+    } else if (fieldName === 'newCost') {
+      const numericValue = parseInt(inputValue, 10);
+      if (!isNaN(numericValue) && numericValue >= 0) {
+        setNewCost(numericValue);
+      }
+    }
   };
 
-  const handleSpecializationEditSubmit = async () => {
+  const handleTestEditSubmit = async () => {
     try {
-      const response = await axios.post(DOCTOR_SPECIALIZATION_GENERIC, {
-        new_title: new_specialization,
+      const response = await axios.post(LAB_TEST_ADD, {
+        new_title: newTest,
+        new_cost: newCost,
       });
-      fetchDoctorSpecializationData();
-      fetchDoctorSpecificSpecialization();
+      fetchLabTestData();
+      fetchLabSpecificTest();
       if (response.status === 201) {
-        setNewSpecialization('');
-        setChangeSpecializationModalShow(false);
-        toast.success('Successfully created a new specialization');
+        setNewTest('');
+        setNewCost('');
+        setChangeTestModalShow(false);
+        toast.success('Successfully created a new test');
       } else if (response.status === 200) {
-        setNewSpecialization('');
-        setChangeSpecializationModalShow(false);
-        toast.success('Specialization already present');
+        setNewTest('');
+        setNewCost('');
+        setChangeTestModalShow(false);
+        toast.success('Test already present');
       } else {
-        toast.error('Error creating a new specialization');
+        toast.error('Error creating a new test');
       }
     } catch (error) {
       // Handle network or request-related errors
       console.error('Error:', error);
       // Display an error message to the user
-      toast.error('Error creating a new specialization');
+      toast.error('Error creating a new test');
     }
   };
 
@@ -177,7 +189,7 @@ function AccountDoctor({ triggerFetch }) {
         keyboard={false}
       >
         <Modal.Header closeButton>
-          <Modal.Title>Edit Specialization</Modal.Title>
+          <Modal.Title>Edit Tests</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Container>
@@ -190,29 +202,29 @@ function AccountDoctor({ triggerFetch }) {
           <Button variant="secondary" onClick={() => setUploadDocumentModalShow(false)}>
             Close
           </Button>
-          <Button variant="primary" onClick={() => handleDocumentUpload()}>Save</Button>
+          <Button variant="primary" onClick={() => handleDocumentUpload()}>*Save</Button>
         </Modal.Footer>
       </Modal>
 
-      {/* Specialization Edit Modal */}
+      {/* Test Edit Modal */}
       <Modal
-        show={changeSpecializationModalShow}
-        onHide={() => setChangeSpecializationModalShow(false)}
+        show={changeTestModalShow}
+        onHide={() => setChangeTestModalShow(false)}
         backdrop="static"
         keyboard={false}
       >
         <Modal.Header closeButton>
-          <Modal.Title>Edit Specialization</Modal.Title>
+          <Modal.Title>Edit Test</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Container>
             <Row>
-              <Col>Common Specialization</Col>
+              <Col>Common Tests: </Col>
               <Col>
-                {specializationDetails.length > 0 ? (
+                {testDetails.length > 0 ? (
                   <ul>
-                    {specializationDetails.map((specialization, index) => (
-                      <li key={index}>{specialization.specialization_title}</li>
+                    {testDetails.map((test, index) => (
+                      <li key={index}>{test.test_title}</li>
                     ))}
                   </ul>
                 ) : (
@@ -221,25 +233,36 @@ function AccountDoctor({ triggerFetch }) {
               </Col>
             </Row>
             <Row>
-              <Col>Add specialization to account</Col>
+              <Col>Add new test to account:</Col>
               <Col>
                 <Form.Control 
                   type="text" 
-                  placeholder={"Enter specialization"} 
-                  value={new_specialization}
-                  name="new_specialization"
-                  onChange={handleInputChangeSpecializationEdit}
+                  placeholder={"Enter test"} 
+                  value={newTest}
+                  name="newTest"
+                  onChange={(e) => handleInputChangeTestEdit(e, 'newTest')}
                 />
               </Col>
             </Row>
-
+            <Row>
+              <Col>Cost:</Col>
+              <Col>
+                <Form.Control 
+                  type="number"
+                  placeholder={"Enter cost"} 
+                  value={newCost}
+                  name="newCost"
+                  onChange={(e) => handleInputChangeTestEdit(e, 'newCost')}
+                />
+              </Col>
+            </Row>
           </Container>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={() => setChangeSpecializationModalShow(false)}>
+          <Button variant="secondary" onClick={() => setChangeTestModalShow(false)}>
             Close
           </Button>
-          <Button variant="primary" onClick={handleSpecializationEditSubmit}>*Save</Button>
+          <Button variant="primary" onClick={handleTestEditSubmit}>Save</Button>
         </Modal.Footer>
       </Modal>
 
@@ -255,18 +278,6 @@ function AccountDoctor({ triggerFetch }) {
         </Modal.Header>
         <Modal.Body>
         <Container>
-          <Row>
-            <Col>Fee Per Session</Col>
-            <Col>
-              <Form.Control 
-                type="text" 
-                placeholder={accountDetails.fee_per_session || "Enter fee per session"} 
-                value={formData.fee_per_session}
-                name="fee_per_session"
-                onChange={handleInputChangeAccountEdit}
-              />
-            </Col>
-          </Row>
           <Row>
             <Col>Experience</Col>
             <Col>
@@ -314,26 +325,25 @@ function AccountDoctor({ triggerFetch }) {
                     <Table className="table mb-0">
                       <tbody>
                         <tr>
-                          <th scope="row">Specialization</th>
-                          <td>{doctorSpecificSpecialization.length > 0 ? (
+                          <th scope="row">Test</th>
+                          <td>{labSpecificTest.length > 0 ? (
                             <ul>
-                              {doctorSpecificSpecialization.map((specialization, index) => (
-                                <li key={index}>{specialization.specialization_title}</li>
+                              {labSpecificTest.map((test, index) => (
+                                <li key={index}>
+                                  {test.test_title}{' (₹ '}
+                                  {test.fee_per_session}{')'}
+                                </li>
                               ))}
                             </ul>
                           ) : (
-                            'No information uploaded and '
+                            'No information uploaded'
                           )}
-                          <Button className='m-2' onClick={() => setChangeSpecializationModalShow(true)}>Edit specialization</Button></td>
+                          <Button className='m-2' onClick={() => setChangeTestModalShow(true)}>Edit test</Button></td>
                         </tr>
                         <tr>
                           <th scope="row">Document</th>
                           <td>{accountDetails.document || 'No document uploaded'} <br/>
                           <Button className='m-2' onClick={() => setUploadDocumentModalShow(true)}>Upload Document</Button></td>
-                        </tr>
-                        <tr>
-                          <th scope="row">Fee per session (₹)</th>
-                          <td>{accountDetails.fee_per_session || 'No information uploaded'}</td>
                         </tr>
                         <tr>
                           <th scope="row">Experience in years</th>
@@ -359,4 +369,4 @@ function AccountDoctor({ triggerFetch }) {
   )
 }
 
-export default AccountDoctor
+export default AccountLab

@@ -39,10 +39,12 @@ import Error401 from './components/Common/Error401';
 //Chat
 import Chat from '../src/components/Common/Chat'
 // Chat Test
-import ChatTest from './components/Common/ChatTest';
+// import ChatTest from './components/Common/ChatTest';
 
 // Sitemap
 import SiteMap from './components/Common/SiteMap';
+import SelectLab from './components/SelectLab';
+import LabAppointmentConfirmation from './components/Patient/LabAppointmentConfirmation';
 
 
 function App() {
@@ -102,9 +104,12 @@ function App() {
           <Route element={<RequireAuth allowedRoles={['is_patient']}/>}>
             <Route path='dashboard-patient' element={<DashboardPatient/>} />
             <Route path='doctor-at-specialization' element={<DoctorSpecialties/>} />
+            <Route path='lab-at-test' element={<LabTests/>} />
              
             <Route path='doctor-at-specialization/:specialization_title' element={<SelectDoctor/>} />
+            <Route path='lab-at-test/:test_title' element={<SelectLab/>} />
             <Route path='doctor-at-specialization/doctor-appointment-confirmation' element={<DoctorAppointmentConfirmation/>} />
+            <Route path='lab-at-test/lab-appointment-confirmation' element={<LabAppointmentConfirmation/>} />
             <Route path='payment-confirmation/' element={<DoctorAppointmentPaymentConfirmation/>} />
           </Route>
 
@@ -135,7 +140,7 @@ function App() {
 
           {/* used while testing*/}
           {/* Chat Test */}
-          <Route path='chat-test' element={<ChatTest />} />
+          {/* <Route path='chat-test' element={<ChatTest />} /> */}
           
           <Route path='doctor-specialties/1/select-doctor/doctor-appointment-confirmation' element={<DoctorAppointmentConfirmation/>} />
           <Route path='doctor-specialties/1/select-doctor/doctor-appointment-confirmation/payment-confirmation' element={<DoctorAppointmentPaymentConfirmation/>} />

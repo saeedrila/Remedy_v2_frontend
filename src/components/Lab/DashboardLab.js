@@ -18,17 +18,23 @@ import {
 import Header from '../Common/Header'
 import Footer from '../Common/Footer'
 import Dashboard from './Dashboard'
-import Appointments from './Appointments'
 
 import classnames from "classnames";
 import Availability from './Availability'
-import Report from './Report'
 import Payments from './Payments'
+import Appointments from './Appointments'
+import AccountLab from './AccountLab'
 
-function DashboardLab(props) {
+function DashboardLab() {
   document.title = 'Labs Dashboard'
 
   const [verticalActiveTab, setverticalActiveTab] = useState("1");
+  const [dashboardButtonPressed, setDashboardButtonPressed] = useState(0);
+  const [accountButtonPressed, setAccountButtonPressed] = useState(0);
+  const [availabilityButtonPressed, setAvailabilityButtonPressed] = useState(0);
+  const [appointmentsButtonPressed, setAppointmentsButtonPressed] = useState(0);
+  const [paymentsButtonPressed, setPaymentsButtonPressed] = useState(0);
+
   const toggleVertical = tab => {
     if (verticalActiveTab !== tab) {
       setverticalActiveTab(tab);
@@ -64,6 +70,7 @@ function DashboardLab(props) {
                             })}
                             onClick={() => {
                               toggleVertical("1");
+                              setDashboardButtonPressed(dashboardButtonPressed + 1);
                             }}
                           >
                             Dashboard
@@ -78,9 +85,10 @@ function DashboardLab(props) {
                             })}
                             onClick={() => {
                               toggleVertical("2");
+                              setAccountButtonPressed(accountButtonPressed + 1);
                             }}
                           >
-                            My Appointmets
+                            Account
                           </NavLink>
                         </NavItem>
                         <NavItem>
@@ -92,9 +100,10 @@ function DashboardLab(props) {
                             })}
                             onClick={() => {
                               toggleVertical("3");
+                              setAvailabilityButtonPressed(availabilityButtonPressed + 1);
                             }}
                           >
-                            My Availability
+                            Availability
                           </NavLink>
                         </NavItem>
                         <NavItem>
@@ -106,9 +115,10 @@ function DashboardLab(props) {
                             })}
                             onClick={() => {
                               toggleVertical("4");
+                              setAppointmentsButtonPressed(appointmentsButtonPressed + 1);
                             }}
                           >
-                            My Prescription
+                            Appointments
                           </NavLink>
                         </NavItem>
                         <NavItem>
@@ -120,6 +130,7 @@ function DashboardLab(props) {
                             })}
                             onClick={() => {
                               toggleVertical("5");
+                              setPaymentsButtonPressed(paymentsButtonPressed + 1);
                             }}
                           >
                             Payments
@@ -135,27 +146,27 @@ function DashboardLab(props) {
 
                         {/* Dashboard */}
                         <TabPane tabId="1">
-                          <Dashboard />
+                          <Dashboard triggerFetch={dashboardButtonPressed} />
                         </TabPane>
 
-                        {/* My appointments */}
+                        {/* My acccount */}
                         <TabPane tabId="2">
-                          <Appointments />
+                          <AccountLab triggerFetch={accountButtonPressed} />
                         </TabPane>
 
                         {/* My availability */}
                         <TabPane tabId="3">
-                          <Availability />
+                          <Availability triggerFetch={availabilityButtonPressed} />
                         </TabPane>
 
-                        {/* My report */}
+                        {/* My Appointments */}
                         <TabPane tabId="4">
-                          <Report />
+                          <Appointments triggerFetch={appointmentsButtonPressed} />
                         </TabPane>
 
                         {/* Payments */}
                         <TabPane tabId="5">
-                          <Payments />
+                          <Payments triggerFetch={paymentsButtonPressed} />
                         </TabPane>
                       </TabContent>
                     </Col>

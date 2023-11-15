@@ -77,11 +77,11 @@ function SiteMap() {
               <div className="intent">
                 <h4 className='hand-cursor' onClick={() => navigate('/profile-executive')}>Profile</h4>
                 <h4 className='hand-cursor' onClick={() => navigate('/dashboard-executive')}>Dashboard</h4>
-                <h4 className='hand-cursor' onClick={() => navigate('/chat-test')}>Chat testing</h4>
+                {/* <h4 className='hand-cursor' onClick={() => navigate('/chat-test')}>Chat testing</h4> */}
               </div>
-            {/* <Button onClick={handleClick}>Click for toast</Button>
+            <Button onClick={handleClick}>Click for toast</Button>
             <br />
-            <Button onClick={()=> refresh()}>Refresh Token</Button> */}
+            <Button onClick={()=> refresh()}>Refresh Token</Button>
         </Container>
         
       </div>
