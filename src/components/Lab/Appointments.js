@@ -15,14 +15,17 @@ import {
 } from 'reactstrap'
 import { ToastContainer, toast } from 'react-toastify';
 import { format } from 'date-fns';
+import { useNavigate } from "react-router-dom";
 
 const FETCH_LAB_APPOINTMENTS = '/fetch-lab-appointments'
 const FETCH_REPORT = '/patch-report'
 const PATCH_REPORT = '/patch-report'
+const INITIATE_CHAT_ON_APPOINTMENT = '/initiate-chat-on-appointment'
 
 
 
 function Appointments({ triggerFetch }) {
+  const navigate = useNavigate();
   const [labAppointmentList, setLabAppointmentList] = useState([]);
 
   // Report modal
@@ -98,6 +101,25 @@ function Appointments({ triggerFetch }) {
     }
     setReportModalShow(true);
   };
+
+  const redirectToChat = async (appointmentId) => {
+    try {
+      const accessToken = localStorage.getItem('accessToken');
+      const response = await axios.post(INITIATE_CHAT_ON_APPOINTMENT, {
+        appointmentId: appointmentId,}, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      if (response.status === 200 || response.status === 201) {
+        navigate('/chat');
+      } else {
+        toast.error('Error initiating chat. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  }
 
 
   return (
@@ -186,6 +208,14 @@ function Appointments({ triggerFetch }) {
                             disabled={appointment.date !== dayZeroDate}
                             >
                             Report
+                          </Button>{' '}
+                          <Button onClick={()=>{
+                            console.log('Appointment ID: ',appointment.appointment_id)
+                            redirectToChat(appointment.appointment_id);
+                            }}
+                            disabled={appointment.date !== dayZeroDate}
+                            >
+                            Chat
                           </Button>
                         </td>
                       </tr>
