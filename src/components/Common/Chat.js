@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { jwtDecode } from "jwt-decode";
 import { Link } from "react-router-dom";
 import {
@@ -27,8 +27,7 @@ const AWS_PUBLIC_URL = 'https://remedy-development.s3.ap-south-1.amazonaws.com'
 const AWS_GENERIC_PROFILE = 'https://remedy-development.s3.ap-south-1.amazonaws.com/media/profile_pic/avatar-1.png'
 
 function Chat() {
-  const [myEmail, setMyEmail] = useState(localStorage.getItem('email'));
-  const [recipientEmail, setRecipientEmail] = useState('');
+  const scrollRef = useRef(null);
   const [inbox, setInbox] = useState([]);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
@@ -56,9 +55,39 @@ function Chat() {
       console.log(error);
     }
   }
+
   useEffect(()=>{
     getInbox();
   }, [])
+
+  useEffect(() => {
+    // Load the first message in the inbox when the component mounts
+    if (inbox.length > 0) {
+      const firstMessage = inbox[0];
+      userChatOpen(
+        0,
+        firstMessage.sender.id,
+        firstMessage.reciever.id,
+        getUsername(
+          firstMessage.sender.id !== user_id
+            ? firstMessage.sender
+            : firstMessage.reciever
+        ),
+        firstMessage.sender.id !== user_id
+          ? firstMessage.sender.id
+          : firstMessage.reciever.id
+      );
+    }
+  }, [inbox]);
+
+  useEffect(() => {
+    // Scroll to the bottom when messages change
+    if (scrollRef.current) {
+      const container = scrollRef.current._container;
+      container.scrollTop = container.scrollHeight;
+    }
+  }, [messages]);
+  
 
   const getDetailedMessages = async (messageSenderId, messageRecieverId) =>{
     try{
@@ -83,8 +112,8 @@ function Chat() {
     formData.append("is_read", false);
     try{
       const response = await axios.post(SEND_MESSAGE_URL, formData);
-        const responseData = await response.json();
-      console.log('Message sent: ', responseData);
+      console.log('Message sent:', response.data);
+      setMessages(prevMessages => [...prevMessages, response.data]);
       setNewMessage('');
     } catch (error){
       console.log(error);
@@ -122,7 +151,9 @@ function Chat() {
                           <div>
                             <h5 className="font-size-14 mb-3">Recent Chats</h5>
                             <ul className="list-unstyled chat-list" id="recent-list">
-                              <PerfectScrollbar style={{ height: "410px" }}>
+                              <PerfectScrollbar 
+                                style={{ height: "410px" }}
+                              >
                                 {inbox.map((message, idx) => (
                                   <li
                                     key={idx}
@@ -189,10 +220,13 @@ function Chat() {
                     <div>
                       <div className="chat-conversation p-3">
                         <ul className="list-unstyled">
-                          <PerfectScrollbar style={{ height: "300px" }}>
+                          <PerfectScrollbar 
+                            ref={scrollRef}
+                            style={{ height: "300px" }}
+                          >
                             {messages.map((message, index) => {
-                              const isMyMessage = message.sender.id === user_id;
-                              const messageClass = isMyMessage ? 'right' : '';
+                              const isNotMyMessage = message.reciever.id !== user_id;
+                              const messageClass = isNotMyMessage ? 'right' : '';
                               return (
                                 <li key={index}className={`${messageClass}`}>
                                   <div className="conversation-list">

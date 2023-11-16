@@ -34,7 +34,7 @@ function Home() {
         img: pic1
       }));
       setSpecializationDetails(updatedSpecializations)
-      console.log('Specialization: ',updatedSpecializations);
+      // console.log('Specialization: ',updatedSpecializations);
     } catch(error) {
       console.error('Error fetching data', error)
     }
@@ -48,7 +48,7 @@ function Home() {
         img: pic2
       }));
       setTestDetails(updatedTests)
-      console.log('Tests : ',updatedTests);
+      // console.log('Tests : ',updatedTests);
     } catch(error) {
       console.error('Error fetching data', error)
     }

@@ -1,10 +1,11 @@
 import './App.css';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Routes, Route } from "react-router-dom";
 import RequireAuth from './components/RequireAuth';
 import Layout from './components/Layout';
 import "./assets/scss/theme.scss";
 import useAuth from './hooks/useAuth';
+import axios from './api/axios';
 
 // Login page
 import Login from './components/Authentication/Login';
@@ -45,20 +46,64 @@ import Chat from '../src/components/Common/Chat'
 import SiteMap from './components/Common/SiteMap';
 import SelectLab from './components/SelectLab';
 import LabAppointmentConfirmation from './components/Patient/LabAppointmentConfirmation';
+const ACCESS_TOKEN_VERIFICATION = 'http://127.0.0.1:8000//token/verify/'
 
 
 function App() {
-  const { setAuth } = useAuth();
-  useEffect(() => {
-    try{
-      // This has to be changed before Production
+  const { auth, setAuth } = useAuth();
+  const [lastVisitedPage, setLastVisitedPage] = useState(
+    sessionStorage.getItem('lastVisitedPage') || '/'
+  );
+  const handlePageChange = (newPage) => {
+    setLastVisitedPage(newPage);
+    sessionStorage.setItem('lastVisitedPage', newPage);
+  };
+
+  const verifyToken = async () => {
+    try {
       const accessToken = localStorage.getItem('accessToken');
+      const response = await fetch(ACCESS_TOKEN_VERIFICATION, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          token: accessToken,
+        }),
+      });
+  
+      if (!response.ok) {
+        // Handle non-successful response here, e.g., show an error message
+        console.error('Token verification failed:', response.statusText);
+        return;
+      }
+  
+      // Token verification successful, you can process the response data here
+      // console.log('Token verification response:', response);
+      const data = await response.json();
+      // console.log('Token verification successful:', data);
+      axios.defaults.headers.common['Authorization'] =`Bearer ${accessToken}`;
+    } catch (error) {
+      console.error('Error during token verification:', error.message);
+    }
+  };
+
+  useEffect(() => {
+    let accessToken;
+    try{
+      accessToken = localStorage.getItem('accessToken');
       const refreshToken = localStorage.getItem('refreshToken');
       const email = localStorage.getItem('email');
       const rolesJSON = localStorage.getItem('roles');
       const username = localStorage.getItem('username');
+      console.log('accessToken: ', accessToken);
+      console.log('refreshToken: ', refreshToken);
+      console.log('email: ', email);
+      console.log('rolesJSON: ', rolesJSON);
+      console.log('usename: ', username);
 
-      if (accessToken && refreshToken && email && rolesJSON) {
+      if (accessToken) {
+        console.log("accesstoken is valid",refreshToken);
         const roles = JSON.parse(rolesJSON);
         setAuth({
           accessToken: accessToken,
@@ -68,8 +113,13 @@ function App() {
           username: username,
         });
       }
+      
     } catch (error){
       console.log(error);
+    }
+    if (accessToken) {
+      console.log('Auth after setAuth: ', auth)
+      verifyToken();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -78,12 +128,13 @@ function App() {
 
   return (
     <>
+      <div onPageChange={handlePageChange} />
       <Routes>
+        {/* Login */}
+        <Route path="login" element={<Login />} />
+
         <Route path="/" element={<Layout />}>
           {/* Public pages */}
-          {/* Login */}
-          <Route path="login" element={<Login />} />
-
           {/* Account registration */}
           <Route path='executive-register' element={<ExecutiveRegister />} />
           <Route path='doctor-register' element={<DoctorRegister />} />

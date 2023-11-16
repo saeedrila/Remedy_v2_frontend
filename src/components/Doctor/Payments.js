@@ -42,6 +42,7 @@ function Payments({ triggerFetch }) {
           <Card>
             <CardBody>
               <CardTitle className="h2">Payment </CardTitle>
+              {doctorPaymentList.length > 0? 
               <div className="table-responsive">
                 <Table className="table mb-0">
                   <thead>
@@ -66,6 +67,8 @@ function Payments({ triggerFetch }) {
                   </tbody>
                 </Table>
               </div>
+              :<h2>No Payment data to show</h2>
+              }
             </CardBody>
           </Card>
         </Col>

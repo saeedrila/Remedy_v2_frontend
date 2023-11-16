@@ -174,6 +174,7 @@ function Appointments({ triggerFetch }) {
           <Card>
             <CardBody>
               <CardTitle className="h2">Appointments </CardTitle>
+              {doctorAppointmentList.length > 0?
               <div className="table-responsive">
                 <Table className="table mb-0">
                   <thead>
@@ -222,6 +223,8 @@ function Appointments({ triggerFetch }) {
                   </tbody>
                 </Table>
               </div>
+              :<h3>Sorry, there are no appointments to show</h3>
+              }
             </CardBody>
           </Card>
         </Col>

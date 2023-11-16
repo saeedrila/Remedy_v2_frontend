@@ -55,6 +55,7 @@ function Login() {
       const roles = response?.data?.roles;
       const profilePicURL = response?.data?.profilePicURL
       setAuth({email, roles, accessToken, refreshToken, username});
+      console.log("setAuth after login",auth);
       console.log('Response: ',response?.data)
       
       localStorage.clear();
