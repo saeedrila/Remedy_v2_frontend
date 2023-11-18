@@ -19,12 +19,7 @@ function Payments({ triggerFetch }) {
   // Fetch payments list
   const fetchExecutivePaymentList = async ()=>{
     try{
-      const accessToken = localStorage.getItem('accessToken');
-      const response = await axios.get(FETCH_PAYMENTS, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
+      const response = await axios.get(FETCH_PAYMENTS);
       setExecutivePaymentList(response.data)
       console.log('Payments tab pressed')
     } catch (error){

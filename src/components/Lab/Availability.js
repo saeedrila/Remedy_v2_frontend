@@ -35,12 +35,8 @@ function Availability({ triggerFetch }) {
 
   const getSlotsAvailable = async () => {
     try {
-      const accessToken = localStorage.getItem('accessToken');
-      const response = await axios.get(LAB_AVAILABILITY_GET_URL, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-      });
+      const response = await axios.get(LAB_AVAILABILITY_GET_URL);
+      
       setSlotsAvailable({
         dayZeroOfflineSlots: response.data[0].slots_details_offline,
         dayZeroOnlineSlots: response.data[0].slots_details_online,

@@ -34,12 +34,7 @@ function AccountLab({ triggerFetch }) {
   
   const fetchAccountData = async () => {
     try {
-      const accessToken = localStorage.getItem('accessToken');
-      const response = await axios.get(GET_ACCOUNT_DETAILS, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      })
+      const response = await axios.get(GET_ACCOUNT_DETAILS)
       setAccountDetails(response.data)
       console.log('Account details: ', response.data)
     } catch(error) {
@@ -48,12 +43,7 @@ function AccountLab({ triggerFetch }) {
   }
   const fetchLabTestData = async () => {
     try {
-      const accessToken = localStorage.getItem('accessToken');
-      const response = await axios.get(LAB_TEST_ADD, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      })
+      const response = await axios.get(LAB_TEST_ADD);
       setTestDetails(response.data)
       // console.log('Lab Tests: ', response.data)
     } catch(error) {
@@ -62,12 +52,7 @@ function AccountLab({ triggerFetch }) {
   }
   const fetchLabSpecificTest = async () => {
     try {
-      const accessToken = localStorage.getItem('accessToken');
-      const response = await axios.get(LAB_SPECIFIC_TEST, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      })
+      const response = await axios.get(LAB_SPECIFIC_TEST);
       setLabSpecificTest(response.data)
       // console.log('Lab Tests: ', response.data)
     } catch(error) {

@@ -18,12 +18,7 @@ function Payments({ triggerFetch }) {
   // Fetch payments list
   const fetchPatientPaymentList = async ()=>{
     try{
-      const accessToken = localStorage.getItem('accessToken');
-      const response = await axios.get(FETCH_PAYMENTS, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
+      const response = await axios.get(FETCH_PAYMENTS);
       setPatientPaymentList(response.data)
     } catch (error){
       console.error('Error fetching data', error)
@@ -32,6 +27,7 @@ function Payments({ triggerFetch }) {
   useEffect(()=> {
     fetchPatientPaymentList();
   }, [triggerFetch])
+
 
 
   return (

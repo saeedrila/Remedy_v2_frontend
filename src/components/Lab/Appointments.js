@@ -38,12 +38,7 @@ function Appointments({ triggerFetch }) {
 
   const fetchLabAppointmentList = async ()=>{
     try{
-      const accessToken = localStorage.getItem('accessToken');
-      const response = await axios.get(FETCH_LAB_APPOINTMENTS, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
+      const response = await axios.get(FETCH_LAB_APPOINTMENTS);
       setLabAppointmentList(response.data)
     } catch (error){
       toast.error('Error fetching data');
@@ -57,16 +52,11 @@ function Appointments({ triggerFetch }) {
 
   const handleReportModalSubmit = async () =>{
     try{
-      const accessToken = localStorage.getItem('accessToken');
       const data = {
         appointment_id: selectedAppointmentId,
         report: reportDetails,
       }
-      const response = await axios.patch(PATCH_REPORT, data, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      })
+      const response = await axios.patch(PATCH_REPORT, data);
       console.log('Report submission successful', response.data);
       setReportModalShow(false);
       fetchLabAppointmentList();
@@ -80,12 +70,8 @@ function Appointments({ triggerFetch }) {
 
   const fetchReport = async (appointmentId) => {
     try {
-      const accessToken = localStorage.getItem('accessToken');
       const response = await axios.get(FETCH_REPORT, {
         params: { appointment_id: appointmentId },
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
       });
       if (response.status === 200) {
         if (response.data.report === null) {
@@ -104,13 +90,9 @@ function Appointments({ triggerFetch }) {
 
   const redirectToChat = async (appointmentId) => {
     try {
-      const accessToken = localStorage.getItem('accessToken');
       const response = await axios.post(INITIATE_CHAT_ON_APPOINTMENT, {
-        appointmentId: appointmentId,}, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
+        appointmentId: appointmentId,},
+      );
       if (response.status === 200 || response.status === 201) {
         navigate('/chat');
       } else {
@@ -120,6 +102,7 @@ function Appointments({ triggerFetch }) {
       console.error('Error:', error);
     }
   }
+
 
 
   return (

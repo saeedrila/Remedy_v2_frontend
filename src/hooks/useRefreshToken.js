@@ -5,7 +5,6 @@ const TOKEN_REFRESH = '/token/refresh/'
 
 const useRefreshToken = () => {
   const { setAuth } = useAuth();
-
   const refresh = async () => {
 
     const refreshToken = localStorage.getItem('refreshToken');

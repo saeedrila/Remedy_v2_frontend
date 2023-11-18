@@ -12,25 +12,19 @@ import {
   Progress
 } from 'reactstrap'
 import axiosPrivate from '../../api/axios'
-import useAuth from '../../hooks/useAuth'
 
 // API endpoint
 const FETCH_DASHBOARD_DATA = '/fetch-executive-dashboard-data'
 
 
 function Dashboard({ triggerFetch }) {
-  const { auth } = useAuth();
   const [executiveDashboardData, setExecutiveDashboardData] = useState('')
 
   const fetchExecutiveDashboardData = async ()=>{
     try{
-      const accessToken = auth.accessToken
-      const response = await axiosPrivate.get(FETCH_DASHBOARD_DATA, {
-        headers: {
-        },
-      });
+      const response = await axiosPrivate.get(FETCH_DASHBOARD_DATA);
       setExecutiveDashboardData(response.data)
-      console.log('Dashboard console', response.data)
+      // console.log('Dashboard console', response.data)
     } catch (error){
       console.error('Error fetching data', error)
     }
@@ -128,77 +122,9 @@ function Dashboard({ triggerFetch }) {
                     ></Progress>
                   </div>
                 </li>
-                {/* <li className="list-group-item">
-                  <p>In-Person</p>
-                  <div >
-                    <Progress
-                      value={50}
-                      color="primary"
-                      style={{ width: '100%' }}
-                      animated
-                    ></Progress>
-                  </div>
-                  </li>
-                  <li className="list-group-item">
-                  <p>Online</p>
-                  <div >
-                    <Progress
-                      value={50}
-                      color="primary"
-                      style={{ width: '100%' }}
-                      animated
-                    ></Progress>
-                  </div>
-                  </li> */}
               </ul>
             </Card>
           </Col>
-
-          {/* <Col mg={6}>
-            <Card>
-              <CardBody>
-                <CardTitle className="mt-0">Confirmed Appointments</CardTitle>
-                <Row className='justify-content-center align-items-center'>
-                  <Col sm={3} className='text-center'>
-                    <i className="bx bx-calendar-check fa-4x"></i>
-                  </Col>
-                </Row>
-                <CardText>
-                  <Container>
-                  <Row>
-                    <Col sm={12} className='text-center'>
-                    <p>
-                      Total:
-                    </p>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col sm={12} className='text-center fs-4'>
-                    <p>
-                      12*
-                    </p>
-                    </Col>
-                  </Row>
-                  </Container>
-                </CardText>
-              </CardBody>
-              <ul className="list-group list-group-flush">
-                <li className="list-group-item d-flex justify-content-between">
-                  <p>Today</p>
-                  <p className='text-right'>12*</p>
-                </li>
-                <li className="list-group-item d-flex justify-content-between">
-                  Tomorrow
-                  <p className='text-right'>12*</p>
-                </li>
-                <li className="list-group-item d-flex justify-content-between">
-                  Day after tomorrow
-                  <p className='text-right'>12*</p>
-                </li>
-              </ul>
-            </Card>
-          </Col> */}
-
         </Row>
       </Container>
     </>

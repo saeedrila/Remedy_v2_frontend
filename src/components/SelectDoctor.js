@@ -47,11 +47,7 @@ function SelectDoctor() {
   const fetchDayDetails = async (requiredDate) => {
     try {
       console.log('Entered fetchDayDetails')
-      const accessToken = localStorage.getItem('accessToken');
       const response = await axios.get(DOCTORS_OF_SELECTED_SPECIALIZATION_PER_DAY, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
         params: {
           title: specialization_title,
           date: requiredDate,

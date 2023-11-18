@@ -33,12 +33,7 @@ function AccountDoctor({ triggerFetch }) {
   
   const fetchAccountData = async () => {
     try {
-      const accessToken = localStorage.getItem('accessToken');
-      const response = await axios.get(GET_ACCOUNT_DETAILS, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      })
+      const response = await axios.get(GET_ACCOUNT_DETAILS)
       setAccountDetails(response.data)
       console.log('Account details: ', response.data)
     } catch(error) {
@@ -47,12 +42,7 @@ function AccountDoctor({ triggerFetch }) {
   }
   const fetchDoctorSpecializationData = async () => {
     try {
-      const accessToken = localStorage.getItem('accessToken');
-      const response = await axios.get(DOCTOR_SPECIALIZATION_GENERIC, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      })
+      const response = await axios.get(DOCTOR_SPECIALIZATION_GENERIC)
       setSpecializationDetails(response.data)
       // console.log('Doctors specializations: ', response.data)
     } catch(error) {
@@ -61,12 +51,7 @@ function AccountDoctor({ triggerFetch }) {
   }
   const fetchDoctorSpecificSpecialization = async () => {
     try {
-      const accessToken = localStorage.getItem('accessToken');
-      const response = await axios.get(DOCTOR_SPECIALIZATION_SPECIFIC, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      })
+      const response = await axios.get(DOCTOR_SPECIALIZATION_SPECIFIC)
       setDoctorSpecificSpecialization(response.data)
       // console.log('Doctors specializations: ', response.data)
     } catch(error) {

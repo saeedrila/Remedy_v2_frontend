@@ -18,12 +18,7 @@ function Payments({ triggerFetch }) {
     // Fetch payments list
     const fetchDoctorPaymentList = async ()=>{
       try{
-        const accessToken = localStorage.getItem('accessToken');
-        const response = await axios.get(FETCH_PAYMENTS, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        });
+        const response = await axios.get(FETCH_PAYMENTS);
         setDoctorPaymentList(response.data)
         console.log('Payments API called')
       } catch (error){

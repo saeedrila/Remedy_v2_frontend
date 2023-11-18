@@ -20,12 +20,7 @@ function Dashboard({ triggerFetch }) {
 
   const fetchLabDashboardData = async ()=>{
     try{
-      const accessToken = localStorage.getItem('accessToken');
-      const response = await axios.get(FETCH_DASHBOARD_DATA, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
+      const response = await axios.get(FETCH_DASHBOARD_DATA);
       setLabDashboardData(response.data)
       console.log('Dashboard API called')
     } catch (error){

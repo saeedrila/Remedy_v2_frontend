@@ -38,12 +38,7 @@ function Appointments({ triggerFetch }) {
 
   const fetchDoctorAppointmentList = async ()=>{
     try{
-      const accessToken = localStorage.getItem('accessToken');
-      const response = await axios.get(FETCH_DOCTOR_APPOINTMENTS, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
+      const response = await axios.get(FETCH_DOCTOR_APPOINTMENTS);
       setDoctorAppointmentList(response.data);
     } catch (error){
       toast.error('Error fetching data');
@@ -57,35 +52,26 @@ function Appointments({ triggerFetch }) {
 
   const handlePrescriptionModalSubmit = async () =>{
     try{
-      const accessToken = localStorage.getItem('accessToken');
       const data = {
         appointment_id: selectedAppointmentId,
         prescription: prescriptionDetails,
       }
-      const response = await axios.patch(PATCH_PRESCRIPTION, data, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      })
-      console.log('Prescription submission successful', response.data);
+      await axios.patch(PATCH_PRESCRIPTION, data);
+      // console.log('Prescription submission successful');
       setPrescriptionModalShow(false);
       fetchDoctorAppointmentList();
       setPrescriptionDetails('')
       toast.success('Prescription submitted');
     } catch (error){
       toast.error('Error while submitting');
-      console.error('Error:', error.data);
+      // console.error('Error:', error.data);
     }
   }
 
   const fetchPrescription = async (appointmentId) => {
     try {
-      const accessToken = localStorage.getItem('accessToken');
       const response = await axios.get(FETCH_PRESCRIPTOIN, {
         params: { appointment_id: appointmentId },
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
       });
       if (response.status === 200) {
         if (response.data.prescription === null) {
@@ -104,13 +90,9 @@ function Appointments({ triggerFetch }) {
 
   const redirectToChat = async (appointmentId) => {
     try {
-      const accessToken = localStorage.getItem('accessToken');
       const response = await axios.post(INITIATE_CHAT_ON_APPOINTMENT, {
-        appointmentId: appointmentId,}, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
+        appointmentId: appointmentId,}
+      );
       if (response.status === 200 || response.status === 201) {
         navigate('/chat');
       } else {

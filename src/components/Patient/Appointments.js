@@ -25,12 +25,7 @@ function Appointments({ triggerFetch }) {
 
   const fetchPatientAppointmentDetails = async ()=> {
     try{
-      const accessToken = localStorage.getItem('accessToken');
-      const response = await axios.get(FETCH_PATIENT_APPOINTMENTS, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
+      const response = await axios.get(FETCH_PATIENT_APPOINTMENTS);
       setPatientAppointmentList(response.data);
       console.log('Patient Appointment List: ', response.data);
     } catch (error){
@@ -40,12 +35,8 @@ function Appointments({ triggerFetch }) {
 
   const fetchPrescription = async (appointmentId) => {
     try {
-      const accessToken = localStorage.getItem('accessToken');
       const response = await axios.get(FETCH_PATIENT_PRESCRIPTION, {
         params: { appointment_id: appointmentId },
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
       });
       if (response.status === 200) {
         if (response.data.prescription === null) {
@@ -65,6 +56,8 @@ function Appointments({ triggerFetch }) {
   useEffect(()=> {
     fetchPatientAppointmentDetails();
   }, [triggerFetch])
+
+
 
   return (
     <>

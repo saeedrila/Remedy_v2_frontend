@@ -13,7 +13,6 @@ import {
 } from 'reactstrap'
 import axios from '../../api/axios'
 import { ToastContainer, toast } from 'react-toastify'
-import useAuth from '../../hooks/useAuth'
 
 // API Endpoint
 const ACCOUNT_APPROVAL_URL = 'account-approval'
@@ -25,17 +24,12 @@ function Staff({ triggerFetch }) {
   const [listOfAccounts, setListOfAccounts] = useState([])
   const [actionModal, setActionModal] = useState(false);
   const [approvalSate, setApprovalState] = useState('')
-  const { auth } = useAuth();
 
   const getAccountForApproval = async () => {
     try {
-      const accessToken = localStorage.getItem('accessToken');
-      const response = await axios.get(ACCOUNT_APPROVAL_URL, {
-        headers: {
-        },
-      });
+      const response = await axios.get(ACCOUNT_APPROVAL_URL);
       setListOfAccounts(response.data);
-      console.log('List of accounts', response.data);
+      console.log('Staff list loaded');
     } catch (error) {
       console.error('Error fetching data', error);
     }
@@ -43,19 +37,12 @@ function Staff({ triggerFetch }) {
 
   const accountApprove = async (status, account_id) => {
     try {
-      const accessToken = auth.accessToken
-      console.log('AccessToken from auth: ', auth.accessToken);
       const response = await axios.patch(ACCOUNT_APPROVAL_URL, {
         id: account_id,
         status: status,
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-        withCredentials: true
       });
       toast.success(response.data.detail);
       getAccountForApproval();
-      console.log('AccessToken: ', accessToken);
     } catch (error) {
       console.log('Error submitting data', error);
       toast.error('Error submitting data');

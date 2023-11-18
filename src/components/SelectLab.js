@@ -47,11 +47,7 @@ function SelectLab() {
   const fetchDayDetails = async (requiredDate) => {
     try {
       console.log('Entered fetchDayDetails')
-      const accessToken = localStorage.getItem('accessToken');
       const response = await axios.get(LABS_OF_SELECTED_TEST_PER_DAY, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
         params: {
           title: test_title,
           date: requiredDate,

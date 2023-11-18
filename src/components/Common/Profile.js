@@ -19,7 +19,6 @@ import Dropzone from "react-dropzone";
 
 import Header from '../../components/Common/Header'
 import Footer from '../../components/Common/Footer'
-import  useAuth  from '../../hooks/useAuth'
 
 // API endpoints
 const GET_PROFILE_DETAILS = '/get-patient-profile-details'
@@ -29,11 +28,6 @@ const CHANGE_PASSWORD = '/change-password'
 
 
 function Profile() {
-  const { auth, setAuth } = useAuth()
-
-  auth.email ? console.log("auth is valid",auth) : console.log("auth is null",auth);
-
-
   // Profile details recieved from backend
   const [profileDetails, setProfileDetails] = useState([]);
 
@@ -82,12 +76,7 @@ function Profile() {
 
   const fetchProfileData = async () => {
     try {
-      const accessToken = localStorage.getItem('accessToken');
-      const response = await axios.get(GET_PROFILE_DETAILS, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      })
+      const response = await axios.get(GET_PROFILE_DETAILS)
       setProfileDetails(response.data)
     } catch(error){
       console.error('Error fetching data', error)

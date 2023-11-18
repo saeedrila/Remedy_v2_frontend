@@ -35,12 +35,7 @@ function Availability({ triggerFetch }) {
 
   const getSlotsAvailable = async () => {
     try {
-      const accessToken = localStorage.getItem('accessToken');
-      const response = await axios.get(DOCTOR_AVAILABILITY_GET_URL, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-      });
+      const response = await axios.get(DOCTOR_AVAILABILITY_GET_URL);
       setSlotsAvailable({
         dayZeroOfflineSlots: response.data[0].slots_details_offline,
         dayZeroOnlineSlots: response.data[0].slots_details_online,
@@ -66,16 +61,12 @@ function Availability({ triggerFetch }) {
   const toggleAvailability = async (status, slot_id, date, line, time) => {
     console.log('Status: ', status, 'Slot_id: ', slot_id, 'Date: ', date, 'Time: ', time, 'Line: ', line);
     try {
-      const accessToken = localStorage.getItem('accessToken');
       await axios.patch(DOCTOR_AVAILABILITY_TOGGLE_URL, {
         status: status,
         slot_id: slot_id,
         date: date,
         line: line,
         time: time,
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
       });
       const successMessage = `Date: ${date}, Time: ${time}, Successfully updated to: ${status === 'True' ? 'Available for booking' : 'Not available'}`;
       toast.success(successMessage);

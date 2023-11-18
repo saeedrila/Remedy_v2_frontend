@@ -29,22 +29,17 @@ function LabAppointmentConfirmation() {
   const line = queryParams.get('line');
   const time_slot = queryParams.get('time');
   const fee = 500
-  const accessToken = localStorage.getItem('accessToken');
   
   const complete_order = (paymentID, orderID, signature)=>{
     axios({
       method: 'post',
       url: RAZORPAY_ORDER_COMPLETE,
       data: {
-          "payment_id": paymentID,
-          "order_id": orderID,
-          "signature": signature,
-          "amount": fee
+        "payment_id": paymentID,
+        "order_id": orderID,
+        "signature": signature,
+        "amount": fee
       },
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    
     })
     .then((response)=>{
       console.log(response.data);
@@ -66,10 +61,8 @@ function LabAppointmentConfirmation() {
         line: line,
         time_slot: time_slot,
       },
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-  })
+    }
+  )
   .then((response)=>{
     // get order id
     const order_id = response.data.id

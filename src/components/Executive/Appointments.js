@@ -10,24 +10,17 @@ import {
   CardTitle,
 } from 'reactstrap'
 import axios from '../../api/axios';
-import useAuth from '../../hooks/useAuth'
 
 // API endpoint
 const FETCH_ALL_APPOINTMENTS = '/fetch-all-appointments'
 
 function Appointments({ triggerFetch }) {
-  const { auth } = useAuth();
   const [appointmentList, setAppointmentList] = useState([])
   const fetchAppointmentList = async ()=> {
     try{
-      const accessToken = auth.accessToken
-      const response = await axios.get(FETCH_ALL_APPOINTMENTS, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
+      const response = await axios.get(FETCH_ALL_APPOINTMENTS);
       setAppointmentList(response.data)
-      console.log('Appointment list: ', response.data)
+      console.log('Appointment list loaded')
     } catch (error){
       console.error('Error fetching data', error)
     }

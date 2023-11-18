@@ -42,20 +42,16 @@ function Login() {
     e.preventDefault();
 
     try{
-      const response = await axios.post(
-        LOGIN_URL,
+      const response = await axios.post(LOGIN_URL,
         { email: email, password: pwd },
-        {headers: 
-          {'Content-Type': 'application/json'}},
-            {withCredentials: true}
-        );
+      );
       const accessToken = response?.data?.accessToken;
       const refreshToken = response?.data?.refreshToken;
       const username = response?.data?.username
       const roles = response?.data?.roles;
       const profilePicURL = response?.data?.profilePicURL
       setAuth({email, roles, accessToken, refreshToken, username});
-      console.log("setAuth after login",auth);
+      console.log("setAuth right after login",auth);
       console.log('Response: ',response?.data)
       
       localStorage.clear();

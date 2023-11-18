@@ -1,5 +1,5 @@
 import './App.css';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Routes, Route } from "react-router-dom";
 import RequireAuth from './components/RequireAuth';
 import Layout from './components/Layout';
@@ -51,13 +51,6 @@ const ACCESS_TOKEN_VERIFICATION = '/token/verify/'
 
 function App() {
   const { auth, setAuth } = useAuth();
-  const [lastVisitedPage, setLastVisitedPage] = useState(
-    sessionStorage.getItem('lastVisitedPage') || '/'
-  );
-  const handlePageChange = (newPage) => {
-    setLastVisitedPage(newPage);
-    sessionStorage.setItem('lastVisitedPage', newPage);
-  };
 
   const verifyToken = async () => {
     try {
@@ -69,7 +62,7 @@ function App() {
       if (response.status >= 200 && response.status < 300) {
         // Token verification successful, you can process the response data here
         const data = response;
-        // console.log('Token verification successful:', data);
+        console.log('Token verification successful:', data);
   
         axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
       } else {
@@ -89,8 +82,6 @@ function App() {
       const email = localStorage.getItem('email');
       const rolesJSON = localStorage.getItem('roles');
       const username = localStorage.getItem('username');
-
-      console.log('rolesJSON: ', rolesJSON);
 
       if (accessToken) {
         const roles = JSON.parse(rolesJSON);
