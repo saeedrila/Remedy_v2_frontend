@@ -47,7 +47,7 @@ npm install sass-loader node-sass css-loader style-loader postcss-loader formik 
 
 Install react-table, axios to send http request to backend and collect data, date fns for getting date related data, react toastify for pop-up messages, razorpay package, .env to load keys directly from .env file, formik for form validation, react scrollbar, Pusher for chat, react drop-zone, JWT Decode for decoding accessToken, moment for time related actions.
 ```
-npm install react-table axios date-fns react-toastify razorpay dotenv formik react-perfect-scrollbar pusher-js react-dropzone jwt-decode moment
+npm install react-table axios date-fns react-toastify razorpay dotenv dotenv-webpack formik react-perfect-scrollbar pusher-js react-dropzone jwt-decode moment
 ```
 
 

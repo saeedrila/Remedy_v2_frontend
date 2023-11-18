@@ -46,7 +46,7 @@ import Chat from '../src/components/Common/Chat'
 import SiteMap from './components/Common/SiteMap';
 import SelectLab from './components/SelectLab';
 import LabAppointmentConfirmation from './components/Patient/LabAppointmentConfirmation';
-const ACCESS_TOKEN_VERIFICATION = 'http://127.0.0.1:8000//token/verify/'
+const ACCESS_TOKEN_VERIFICATION = '/token/verify/'
 
 
 function App() {
@@ -62,27 +62,20 @@ function App() {
   const verifyToken = async () => {
     try {
       const accessToken = localStorage.getItem('accessToken');
-      const response = await fetch(ACCESS_TOKEN_VERIFICATION, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          token: accessToken,
-        }),
+      const response = await axios.post(ACCESS_TOKEN_VERIFICATION, {
+        token: accessToken,
       });
   
-      if (!response.ok) {
-        // Handle non-successful response here, e.g., show an error message
-        console.error('Token verification failed:', response.statusText);
-        return;
-      }
+      if (response.status >= 200 && response.status < 300) {
+        // Token verification successful, you can process the response data here
+        const data = response;
+        // console.log('Token verification successful:', data);
   
-      // Token verification successful, you can process the response data here
-      // console.log('Token verification response:', response);
-      const data = await response.json();
-      // console.log('Token verification successful:', data);
-      axios.defaults.headers.common['Authorization'] =`Bearer ${accessToken}`;
+        axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+      } else {
+        // Handle non-successful response here, e.g., show an error message
+        // console.error('Token verification failed:', response.statusText);
+      }
     } catch (error) {
       console.error('Error during token verification:', error.message);
     }
@@ -96,14 +89,10 @@ function App() {
       const email = localStorage.getItem('email');
       const rolesJSON = localStorage.getItem('roles');
       const username = localStorage.getItem('username');
-      console.log('accessToken: ', accessToken);
-      console.log('refreshToken: ', refreshToken);
-      console.log('email: ', email);
+
       console.log('rolesJSON: ', rolesJSON);
-      console.log('usename: ', username);
 
       if (accessToken) {
-        console.log("accesstoken is valid",refreshToken);
         const roles = JSON.parse(rolesJSON);
         setAuth({
           accessToken: accessToken,
@@ -113,13 +102,12 @@ function App() {
           username: username,
         });
       }
-      
     } catch (error){
       console.log(error);
     }
     if (accessToken) {
       console.log('Auth after setAuth: ', auth)
-      verifyToken();
+      verifyToken(); 
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -128,7 +116,6 @@ function App() {
 
   return (
     <>
-      <div onPageChange={handlePageChange} />
       <Routes>
         {/* Login */}
         <Route path="login" element={<Login />} />

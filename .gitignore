@@ -25,6 +25,7 @@ yarn-error.log*
 
 # Virtual environment
 Pipfile.lock
+package-lock.json
 
 
 # IDE and editor files

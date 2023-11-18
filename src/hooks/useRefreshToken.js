@@ -1,6 +1,8 @@
 import axios from '../api/axios'
 import useAuth from './useAuth'
 
+const TOKEN_REFRESH = '/token/refresh/'
+
 const useRefreshToken = () => {
   const { setAuth } = useAuth();
 
@@ -10,7 +12,7 @@ const useRefreshToken = () => {
     if (!refreshToken) {
       return null;
     }
-    const response = await axios.post('/token/refresh/', {
+    const response = await axios.post(TOKEN_REFRESH, {
       refresh: refreshToken,
     },
     {

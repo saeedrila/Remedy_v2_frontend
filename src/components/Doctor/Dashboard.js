@@ -124,75 +124,9 @@ function Dashboard({ triggerFetch }) {
                     ></Progress>
                   </div>
                 </li>
-                {/* <li className="list-group-item">
-                  <p>In-Person</p>
-                  <div >
-                    <Progress
-                      value={50}
-                      color="primary"
-                      style={{ width: '100%' }}
-                      animated
-                    ></Progress>
-                  </div>
-                  </li>
-                  <li className="list-group-item">
-                  <p>Online</p>
-                  <div >
-                    <Progress
-                      value={50}
-                      color="primary"
-                      style={{ width: '100%' }}
-                      animated
-                    ></Progress>
-                  </div>
-                  </li> */}
               </ul>
             </Card>
           </Col>
-          {/* <Col mg={6}>
-            <Card>
-              <CardBody>
-                <CardTitle className="mt-0">Confirmed Appointments</CardTitle>
-                <Row className='justify-content-center align-items-center'>
-                  <Col sm={3} className='text-center'>
-                    <i className="bx bx-calendar-check fa-4x"></i>
-                  </Col>
-                </Row>
-                <CardText>
-                  <Container>
-                  <Row>
-                    <Col sm={12} className='text-center'>
-                    <p>
-                      Total:
-                    </p>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col sm={12} className='text-center fs-4'>
-                    <p>
-                      12*
-                    </p>
-                    </Col>
-                  </Row>
-                  </Container>
-                </CardText>
-              </CardBody>
-              <ul className="list-group list-group-flush">
-                <li className="list-group-item d-flex justify-content-between">
-                  <p>Today</p>
-                  <p className='text-right'>12*</p>
-                </li>
-                <li className="list-group-item d-flex justify-content-between">
-                  Tomorrow
-                  <p className='text-right'>12*</p>
-                </li>
-                <li className="list-group-item d-flex justify-content-between">
-                  Day after tomorrow
-                  <p className='text-right'>12*</p>
-                </li>
-              </ul>
-            </Card>
-          </Col> */}
         </Row>
       </Container>
     </>

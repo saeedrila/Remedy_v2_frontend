@@ -21,7 +21,7 @@ import Footer from "./Footer";
 // Message API endpoint
 // const MESSAGE_API = 'http://127.0.0.1:8000/api/chat'
 const GET_MY_INBOX_URL = '/my-messages/'
-const SEND_MESSAGE_URL = 'http://127.0.0.1:8000/api/send-messages'
+const SEND_MESSAGE_URL = '/send-messages'
 const GET_DETAILED_MESSAGES = '/get-messages/'
 const AWS_PUBLIC_URL = 'https://remedy-development.s3.ap-south-1.amazonaws.com'
 const AWS_GENERIC_PROFILE = 'https://remedy-development.s3.ap-south-1.amazonaws.com/media/profile_pic/avatar-1.png'
