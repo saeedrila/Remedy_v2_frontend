@@ -19,7 +19,7 @@ import { ToastContainer, toast } from 'react-toastify'
 const GET_ACCOUNT_DETAILS = '/get-lab-account-details'
 const UPDATE_ACCOUNT_DETAILS = '/get-lab-account-details'
 const LAB_SPECIFIC_TEST ='/get-lab-specific-test'
-const LAB_TEST_ADD ='/lab-test-add-url'
+const LAB_TEST_ADD ='/get-all-lab-tests'
 
 function AccountLab({ triggerFetch }) {
   const [accountDetails, setAccountDetails] = useState([]);
@@ -187,7 +187,7 @@ function AccountLab({ triggerFetch }) {
           <Button variant="secondary" onClick={() => setUploadDocumentModalShow(false)}>
             Close
           </Button>
-          <Button variant="primary" onClick={() => handleDocumentUpload()}>*Save</Button>
+          <Button variant="primary" onClick={() => handleDocumentUpload()}>Save</Button>
         </Modal.Footer>
       </Modal>
 

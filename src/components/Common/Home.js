@@ -114,7 +114,7 @@ function Home() {
                       <Card className="border text-center hand-cursor"
                         onClick={() => {
                           const title = data.specialization_title.replace(/ /g, '-');
-                          navigate(`/lab-at-test/${title}`)
+                          navigate(`/doctor-at-specialization/${title}`)
                         }}
                       >
                         <Card.Img variant="top" src={data.img} />
@@ -151,7 +151,7 @@ function Home() {
                       <Card className="border text-center hand-cursor"
                         onClick={() => {
                           const title = data.test_title.replace(/ /g, '-');
-                          navigate(`/doctor-at-specialization/${title}`)
+                          navigate(`/lab-at-test/${title}`)
                         }}
                       >
                         <Card.Img variant="top" src={data.img} />

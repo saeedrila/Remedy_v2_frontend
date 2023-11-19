@@ -224,7 +224,7 @@ function AccountDoctor({ triggerFetch }) {
           <Button variant="secondary" onClick={() => setChangeSpecializationModalShow(false)}>
             Close
           </Button>
-          <Button variant="primary" onClick={handleSpecializationEditSubmit}>*Save</Button>
+          <Button variant="primary" onClick={handleSpecializationEditSubmit}>Save</Button>
         </Modal.Footer>
       </Modal>
 
