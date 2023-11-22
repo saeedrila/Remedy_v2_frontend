@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { jwtDecode } from "jwt-decode";
+import { w3cwebsocket as W3CWebSocket } from "websocket";
 import { Link } from "react-router-dom";
 import {
   Button,
@@ -18,10 +19,11 @@ import moment from 'moment';
 import Header from "./Header";
 import Footer from "./Footer";
 
-// Message API endpoint
-// const MESSAGE_API = 'http://127.0.0.1:8000/api/chat'
+// Socket message API endpoint
+const MESSAGE_API = process.env.NODE_ENV === 'production'
+  ? process.env.REACT_APP_WS_MESSAGE_API_PROD
+  : process.env.REACT_APP_WS_MESSAGE_API_DEV;
 const GET_MY_INBOX_URL = '/my-messages/'
-const SEND_MESSAGE_URL = '/send-messages'
 const GET_DETAILED_MESSAGES = '/get-messages/'
 const AWS_PUBLIC_URL = 'https://remedy-development.s3.ap-south-1.amazonaws.com'
 const AWS_GENERIC_PROFILE = 'https://remedy-development.s3.ap-south-1.amazonaws.com/media/profile_pic/avatar-1.png'
@@ -37,10 +39,13 @@ function Chat() {
   const decoded = jwtDecode(accessToken)
   const user_id = decoded.user_id
 
+  const [myProfile, setMyProfile] = useState({});
+  const [secondPersonProfile, setSecondPersonProfile] = useState({});
 
-  const [chatBoxUsername, setChatBoxUsername] = useState('');
+  // Web socket related
+  const [websocket, setWebsocket] = useState(null);
   const [currentRoomId, setCurrentRoomId] = useState('');
-  const [otherPersonId, setOtherPersonId] = useState('');
+
 
   const getInbox = async() => {
     try{
@@ -50,7 +55,7 @@ function Chat() {
         {withCredentials: true}
       );
       setInbox(response.data)
-      console.log('Response.data: ', response.data)
+      console.log('Inbox data: ', response.data)
     } catch(error){
       console.log(error);
     }
@@ -61,32 +66,88 @@ function Chat() {
   }, [])
 
   useEffect(() => {
-    // Load the first message in the inbox when the component mounts
-    if (inbox.length > 0) {
-      const firstMessage = inbox[0];
-      userChatOpen(
-        0,
-        firstMessage.sender.id,
-        firstMessage.reciever.id,
-        getUsername(
-          firstMessage.sender.id !== user_id
-            ? firstMessage.sender
-            : firstMessage.reciever
-        ),
-        firstMessage.sender.id !== user_id
-          ? firstMessage.sender.id
-          : firstMessage.reciever.id
-      );
-    }
-  }, [inbox]);
-
-  useEffect(() => {
     // Scroll to the bottom when messages change
     if (scrollRef.current) {
       const container = scrollRef.current._container;
       container.scrollTop = container.scrollHeight;
     }
   }, [messages]);
+
+  const establishConnection = (roomId) =>{
+    const client = new W3CWebSocket(`${MESSAGE_API}${roomId}/`);
+    console.log("WebSocketComponent mounted");
+
+    client.onopen = () => {
+      console.log("WebSocket Client Connected");
+      setWebsocket(client); // Update the WebSocket instance in state
+    };
+
+    client.onerror = (error) => {
+      console.error("WebSocket Error:", error);
+    };
+
+    client.onmessage = (message) => {
+      const dataFromServer = JSON.parse(message.data);
+      console.log("WebSocket Client Message received: ", dataFromServer);
+    
+      if (dataFromServer) {
+        // Check if the message with the same ID already exists
+        const isMessageExists = messages.some(
+          (messages) => messages.id === dataFromServer.id
+        );
+    
+        if (!isMessageExists) {
+          setMessages((messages) => [
+            ...messages,
+            {
+              id: dataFromServer.id, // Assuming each message has a unique identifier
+              message: dataFromServer.message,
+              sender_profile: dataFromServer.sender === myProfile.id
+                ? myProfile
+                : secondPersonProfile,
+              receiver_profile: dataFromServer.sender === myProfile.id
+                ? secondPersonProfile
+                : myProfile,
+            },
+          ]);
+        }
+      }
+      console.log('Message after WS receiving: ', messages)
+    };    
+  }
+
+  // Cleanup the WebSocket connection on component unmount
+  useEffect(() => {
+    return () => {
+      if (websocket && websocket.readyState === websocket.OPEN) {
+        websocket.close();
+      }
+    };
+  }, [currentRoomId]);
+
+  const sendMessageOnWS = (e) => {
+    e.preventDefault();
+    console.log("WebSocket Message sent");
+    if (
+      websocket &&
+      websocket.readyState === websocket.OPEN &&
+      newMessage.trim() !== ""
+    ) {
+      // Ensure the sender's profile is set correctly
+      const senderProfile = myProfile || {}; // Fallback to an empty object if myProfile is not set
+  
+      websocket.send(
+        JSON.stringify({
+          type: "message",
+          text: newMessage,
+          sender: senderProfile.id,
+          reciever: secondPersonProfile.id,
+        })
+      );
+      setNewMessage("");
+    }
+  };
+  
   
 
   const getDetailedMessages = async (messageSenderId, messageRecieverId) =>{
@@ -103,22 +164,6 @@ function Chat() {
     }
   }
 
-  const sendMessage = async (e) =>{
-    e.preventDefault();
-    const formData = new FormData()
-    formData.append("sender", user_id);
-    formData.append("reciever", otherPersonId);
-    formData.append("message", newMessage);
-    formData.append("is_read", false);
-    try{
-      const response = await axios.post(SEND_MESSAGE_URL, formData);
-      console.log('Message sent:', response.data);
-      setMessages(prevMessages => [...prevMessages, response.data]);
-      setNewMessage('');
-    } catch (error){
-      console.log(error);
-    }
-  }
 
   const getProfilePicUrl = (user) => (
     user.profile_pic_url !== null ? `${AWS_PUBLIC_URL}/${user.profile_pic_url}` : AWS_GENERIC_PROFILE
@@ -126,11 +171,17 @@ function Chat() {
   const getUsername = (user) => (user.username !== "" ? user.username : user.email);
   
   //Use For Chat Box
-  const userChatOpen = (idx, messageSenderId, messageRecieverId, username, otherPersonInChatId) => {
-    getDetailedMessages(messageSenderId, messageRecieverId);
-    setCurrentRoomId(idx);
-    setChatBoxUsername(username);
-    setOtherPersonId(otherPersonInChatId);
+  const userChatOpen = (roomId, messageSender, messageReciever) => {
+    setCurrentRoomId(roomId);
+    getDetailedMessages(messageSender.id, messageReciever.id);
+    establishConnection(roomId);
+    if (user_id === messageSender.id) {
+      setMyProfile(messageSender);
+      setSecondPersonProfile(messageReciever);
+    } else {
+      setMyProfile(messageReciever);
+      setSecondPersonProfile(messageSender);
+    }
   };
 
   return (
@@ -167,25 +218,23 @@ function Chat() {
                                       to="#"
                                       onClick={() => {
                                         userChatOpen(
-                                          idx, 
-                                          message.sender.id,
-                                          message.reciever.id,
-                                          getUsername(message.sender.id !== user_id ? message.sender : message.reciever),
-                                          message.sender.id !== user_id ? message.sender.id : message.reciever.id
+                                          message.room,
+                                          message.sender_profile,
+                                          message.reciever_profile,
                                         );
                                       }}
                                     >
                                       <div className="d-flex mb-1">
-                                        <div className={message.sender.id !== user_id ? "avatar-xs align-self-center me-3" : "align-self-center me-3"}>
+                                        <div className={message.sender_profile.id !== user_id ? "avatar-xs align-self-center me-3" : "align-self-center me-3"}>
                                           <img
-                                            src={getProfilePicUrl(message.sender.id !== user_id ? message.sender : message.reciever)}
+                                            src={secondPersonProfile ? getProfilePicUrl(message.sender_profile?.id !== user_id ? message.sender_profile : message.reciever_profile) : ''}
                                             className="rounded-circle avatar-xs"
                                             alt=""
                                           />
                                         </div>
                                         <div className="flex-grow-1 overflow-hidden">
                                           <h5 className="text-truncate font-size-14 mb-1">
-                                            {getUsername(message.sender.id !== user_id ? message.sender : message.reciever)}
+                                            {getUsername(message.sender_profile.id !== user_id ? message.sender_profile : message.reciever_profile)}
                                           </h5>
                                           <p className="text-truncate mb-0">
                                             {message.message}
@@ -206,13 +255,21 @@ function Chat() {
                     </div>
                   </div>
                 </div>
+                { currentRoomId ? 
                 <div className="w-100 user-chat">
                   <Card>
                     <div className="p-4 border-bottom ">
                       <Row>
-                        <Col md="4" xs="9">
+                        <Col md={4} xs={9} className="d-flex align-items-center">
+                          <div className="avatar-xs me-3">
+                            <img
+                              src={getProfilePicUrl(secondPersonProfile)}
+                              className="rounded-circle avatar-xs"
+                              alt=""
+                            />
+                          </div>
                           <h5 className="font-size-15 mb-1">
-                            {chatBoxUsername}
+                            {getUsername(secondPersonProfile)}
                           </h5>
                         </Col>
                       </Row>
@@ -225,14 +282,14 @@ function Chat() {
                             style={{ height: "300px" }}
                           >
                             {messages.map((message, index) => {
-                              const isNotMyMessage = message.reciever.id !== user_id;
-                              const messageClass = isNotMyMessage ? 'right' : '';
+                              const isMyMessage = message.sender_profile.id === user_id;
+                              const messageClass = isMyMessage ? 'right' : '';
                               return (
                                 <li key={index}className={`${messageClass}`}>
                                   <div className="conversation-list">
                                     <div className="ctext-wrap">
                                       <div className="conversation-name">
-                                      {message.sender.username || message.sender.email}
+                                      { getUsername(message.sender_profile.id === user_id ? myProfile: secondPersonProfile) }
                                       </div>
                                       <p>{message.message}</p>
                                       <p className="chat-time mb-0">
@@ -248,7 +305,7 @@ function Chat() {
                         </ul>
                       </div>
                       <div className="p-3 chat-input-section">
-                        <form onSubmit={sendMessage}>
+                        <form onSubmit={sendMessageOnWS}>
                           <Row>
                             <Col>
                               <div className="position-relative">
@@ -279,7 +336,12 @@ function Chat() {
                     </div>
                   </Card>
                 </div>
+                : <div>
+                Select a chat
               </div>
+              }
+              </div>
+              
             </Col>
           </Row>
         </Container>
