@@ -149,6 +149,18 @@ function Profile() {
   })
 
   function handleAcceptedFiles(files) {
+    if (files.length > 1) {
+      toast.error("Only one file can be uploaded at a time. Please select only one file.");
+      return;
+    }
+    const file = files[0];
+    const maxSizeInBytes = 10 * 1024 * 1024; // 10MB
+
+    if (file.size > maxSizeInBytes) {
+      toast.error("File size exceeds the maximum allowed (10MB). Please choose a smaller file.");
+      return;
+    }
+
     files.map(file =>
       Object.assign(file, {
         preview: URL.createObjectURL(file),
@@ -184,6 +196,7 @@ function Profile() {
       setProfilePicURL(returnUrl)
       setProfileImageEditModalShow(false);
       toast.success('File uploaded successfully');
+      
     } catch (error) {
       console.error('Error uploading file:', error);
       toast.error('An error occurred while uploading file');

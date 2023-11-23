@@ -193,7 +193,9 @@ function Chat() {
         <Container>
           <Row>
             <Col lg="12">
+            {inbox.length > 0?
               <div className="d-lg-flex">
+                
                 <div className="chat-leftsidebar me-lg-4">
                   <div>
                     <div className="chat-leftsidebar-nav">
@@ -336,12 +338,13 @@ function Chat() {
                     </div>
                   </Card>
                 </div>
-                : <div>
-                Select a chat
+                :<div>
+                  Select a chat
+                </div>
+                }
               </div>
+              :<h3>There are no conversation to show</h3> 
               }
-              </div>
-              
             </Col>
           </Row>
         </Container>

@@ -11,15 +11,17 @@ import {
 import {
   CardBody,
   Table,
-} from 'reactstrap'
-import axios from '../../api/axios'
-import { ToastContainer, toast } from 'react-toastify'
+} from 'reactstrap';
+import axios from '../../api/axios';
+import Dropzone from "react-dropzone";
+import { toast } from 'react-toastify';
 
 // API Endpoints
 const GET_ACCOUNT_DETAILS = '/get-lab-account-details'
 const UPDATE_ACCOUNT_DETAILS = '/get-lab-account-details'
 const LAB_SPECIFIC_TEST ='/get-lab-specific-test'
 const LAB_TEST_ADD ='/get-all-lab-tests'
+const UPLOAD_DOCUMENT = '/upload-document'
 
 function AccountLab({ triggerFetch }) {
   const [accountDetails, setAccountDetails] = useState([]);
@@ -28,9 +30,13 @@ function AccountLab({ triggerFetch }) {
   const [newTest, setNewTest] = useState('');
   const [newCost, setNewCost] = useState('');
 
+  // Test and Account Edit modals
   const [changeTestModalShow, setChangeTestModalShow] = useState(false)
-  const [uploadDocumentModalShow, setUploadDocumentModalShow] = useState(false)
   const [accountEditModalShow, setAccountEditModalShow] = useState(false)
+
+  // Document upload related
+  const [documentUploadModalShow, setDocumentUploadModalShow] = useState(false);
+  const [selectedFiles, setselectedFiles] = useState([]);
   
   const fetchAccountData = async () => {
     try {
@@ -147,47 +153,106 @@ function AccountLab({ triggerFetch }) {
     }
   };
 
-  const handleDocumentUpload = async () => {
+  function handleAcceptedFiles(files) {
+    if (files.length > 1) {
+      toast.error("Only one file can be uploaded at a time. Please select only one file.");
+      return;
+    }
+    const file = files[0];
+    const maxSizeInBytes = 10 * 1024 * 1024; // 10MB
 
+    if (file.size > maxSizeInBytes) {
+      toast.error("File size exceeds the maximum allowed (10MB). Please choose a smaller file.");
+      return;
+    }
+
+    files.map(file =>
+      Object.assign(file, {
+        preview: URL.createObjectURL(file),
+        formattedSize: formatBytes(file.size),
+      })
+    )
+    setselectedFiles(files)
   }
+  function formatBytes(bytes, decimals = 2) {
+    if (bytes === 0) return "0 Bytes"
+    const k = 1024
+    const dm = decimals < 0 ? 0 : decimals
+    const sizes = ["Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"]
+
+    const i = Math.floor(Math.log(bytes) / Math.log(k))
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i]
+  }
+
+  const handleDocumentSubmit = async () => {
+    try {
+      if (selectedFiles.length === 0) {
+        return;
+      }
+      const formData = new FormData();
+      formData.append('document', selectedFiles[0]);
+  
+      const response = await axios.post(UPLOAD_DOCUMENT, formData, {
+      });
+  
+      console.log('Response data: ', response.data)
+      setDocumentUploadModalShow(false);
+      toast.success('Document uploaded successfully');
+      fetchAccountData();
+    } catch (error) {
+      console.error('Error uploading Document:', error);
+      toast.error('An error occurred while uploading document');
+    }
+  };
+
+
 
 
   return (
     <>
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-      />
-      {/* Upload document Modal */}
+      {/* Document upload modal */}
       <Modal
-        show={uploadDocumentModalShow}
-        onHide={() => setUploadDocumentModalShow(false)}
+        show={documentUploadModalShow}
+        onHide={() => setDocumentUploadModalShow(false)}
         backdrop="static"
         keyboard={false}
       >
         <Modal.Header closeButton>
-          <Modal.Title>Edit Tests</Modal.Title>
+          <Modal.Title>Upload Document</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Container>
-            <Row>
-              <Col>Document</Col>
-            </Row>
-          </Container>
+        <Container>
+          <Row>
+            <Col>
+              <Dropzone
+                onDrop={acceptedFiles => {
+                  handleAcceptedFiles(acceptedFiles)
+                }}
+              >
+                {({ getRootProps, getInputProps }) => (
+                  <div className="dropzone">
+                    <div
+                      className="dz-message needsclick mt-2"
+                      {...getRootProps()}
+                    >
+                      <input {...getInputProps()} />
+                      <div className="mb-3">
+                        <i className="display-4 text-muted bx bxs-cloud-upload" />
+                      </div>
+                      <h4>Drop files here or click to upload.</h4>
+                    </div>
+                  </div>
+                )}
+              </Dropzone>
+            </Col>
+          </Row>
+        </Container>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={() => setUploadDocumentModalShow(false)}>
+          <Button variant="secondary" onClick={() => setDocumentUploadModalShow(false)}>
             Close
           </Button>
-          <Button variant="primary" onClick={() => handleDocumentUpload()}>Save</Button>
+          <Button variant="primary" onClick={handleDocumentSubmit}>Upload</Button>
         </Modal.Footer>
       </Modal>
 
@@ -327,8 +392,11 @@ function AccountLab({ triggerFetch }) {
                         </tr>
                         <tr>
                           <th scope="row">Document</th>
-                          <td>{accountDetails.document || 'No document uploaded'} <br/>
-                          <Button className='m-2' onClick={() => setUploadDocumentModalShow(true)}>Upload Document</Button></td>
+                          <td>
+                            {accountDetails.document_url 
+                              ?(<a href={ accountDetails.document_url} target="_blank"  rel="noopener noreferrer" download="document">Document</a>)
+                              :(<span>No document uploaded</span>)}<br/>
+                          <Button className='m-2' onClick={() => setDocumentUploadModalShow(true)}>Upload Document</Button></td>
                         </tr>
                         <tr>
                           <th scope="row">Experience in years</th>

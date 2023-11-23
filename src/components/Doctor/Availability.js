@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import axios from '../../api/axios';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import {
   Button,
   Row,
@@ -99,18 +99,6 @@ function Availability({ triggerFetch }) {
 
   return (
     <>
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-      />
       {/* DayZero */}
       <Row>
         <Col sm={6}>

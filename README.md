@@ -21,6 +21,24 @@ This module deals with all video call related APIs, settings, keys, etc.
 ### Module 9: Chat
 This module deals with all chat related APIs, settings, keys, etc.
 
+Versioning:
+I am planning to use semantic versioning for the application backend as well as for the frontend. The structure is as follows:
+<major>.<minor>.<patch>
+Major: Major changes in the code which is incompatible with previous code.
+Minor: Adding new features or changes
+Patch: Bug fixes, 'b' represents backend and 'f' represent forntend
+The versioning is mainly for developmental purpose. Since the versioning starting from 1.x.x, the urls starts with 'api'.
+
+1.0.0:
+Working code (Not all features are tested)
+
+1.0.1f:
+* Issue with multiple toast on doctor's and lab's dashboard solved.
+* If there are no chats, it shows 'There are no conversation to show on the chat page.
+* Executives can initiate chat with Staff, Doctors, and Labs.
+* Doctor document upload modal setup. Maxium 10MB, 1 file could be uploaded.
+* 10MB size limit for profile pic upload.
+
 
 ## Prerequisites:
 I am using VSCode for my development and its integrated terminal. Any IDE and command prompt is enough.

@@ -13,7 +13,7 @@ import {
   CardBody,
   CardTitle,
 } from 'reactstrap'
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import { format } from 'date-fns';
 import { useNavigate } from "react-router-dom";
 
@@ -107,18 +107,6 @@ function Appointments({ triggerFetch }) {
 
   return (
     <>
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-      />
       {/* Profile Edit Modal */}
       <Modal
         show={reportModalShow}
@@ -206,7 +194,7 @@ function Appointments({ triggerFetch }) {
                   </tbody>
                 </Table>
               </div>
-              :<h3>Sorry, there are no appointments to show</h3>
+              :<h3>There are no appointments to show</h3>
               }
             </CardBody>
           </Card>

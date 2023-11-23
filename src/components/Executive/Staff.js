@@ -13,13 +13,16 @@ import {
 } from 'reactstrap'
 import axios from '../../api/axios'
 import { ToastContainer, toast } from 'react-toastify'
+import { useNavigate } from 'react-router-dom'
 
 // API Endpoint
 const ACCOUNT_APPROVAL_URL = 'account-approval'
+const INITIATE_CHAT_BY_EXECUTIVE = '/initiate-chat-by-executive'
 
 
 
 function Staff({ triggerFetch }) {
+  const navigate = useNavigate();
   document.title = 'Executive Dashboard || Staff approval'
   const [listOfAccounts, setListOfAccounts] = useState([])
   const [actionModal, setActionModal] = useState(false);
@@ -30,6 +33,7 @@ function Staff({ triggerFetch }) {
       const response = await axios.get(ACCOUNT_APPROVAL_URL);
       setListOfAccounts(response.data);
       console.log('Staff list loaded');
+      console.log('Staff list: ', response.data);
     } catch (error) {
       console.error('Error fetching data', error);
     }
@@ -53,6 +57,22 @@ function Staff({ triggerFetch }) {
     // Fetch initial data when the component mounts
     getAccountForApproval();
   }, [triggerFetch]);
+
+  const redirectToChat = async (staffId) => {
+    try {
+      const response = await axios.post(INITIATE_CHAT_BY_EXECUTIVE, {
+        staffId: staffId,}
+      );
+      if (response.status === 200 || response.status === 201) {
+        navigate('/chat');
+      } else {
+        toast.error('Error initiating chat. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      toast.error(error);
+    }
+  }
 
   return (
     <>
@@ -105,6 +125,7 @@ function Staff({ triggerFetch }) {
                       <th>Sl. No.</th>
                       <th>ID</th>
                       <th>Account type</th>
+                      <th>Email</th>
                       <th>Document</th>
                       <th>Status</th>
                       <th>Action</th>
@@ -117,6 +138,11 @@ function Staff({ triggerFetch }) {
                         <td>{account.id}</td>
                         <td>{account.is_doctor ? 'Doctor' : account.is_lab ? 'Lab' : account.is_executive ? 'Executive' : 'Other'}</td>
                         <td>{account.email}</td>
+                        <td>
+                            {account.document_url 
+                              ?(<a href={ account.document_url } target="_blank" rel="noopener noreferrer" download="document">Document</a>)
+                              :(<span>N/A</span>)}<br/>
+                        </td>
                         <td>{account.is_active ? 'Approved' : 'Not Approved'}</td>
                         <td>
                           {account.is_active ?
@@ -130,12 +156,20 @@ function Staff({ triggerFetch }) {
                           Block
                           </Button>
                           :<Button 
+                          gap={3}
                           variant='success' 
                           onClick={() => accountApprove("True", account.id)}
                           >
                           Approve Now
                           </Button>
                           }
+                          <Button onClick={()=>{
+                              console.log('Staff ID: ',account.id)
+                              redirectToChat(account.id);
+                            }}
+                          >
+                            Chat
+                          </Button>
                         </td>
                       </tr>
                     ))}

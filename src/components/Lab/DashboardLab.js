@@ -4,6 +4,7 @@ import {
     Row,
     Col,
   } from 'react-bootstrap'
+  import { ToastContainer } from 'react-toastify';
   import {
     Card,
     CardBody,
@@ -44,6 +45,18 @@ function DashboardLab() {
 
   return (
     <>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
       {/* Header section */}
       <Header />
 
