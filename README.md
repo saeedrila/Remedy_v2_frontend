@@ -39,6 +39,9 @@ Working code (Not all features are tested)
 * Doctor document upload modal setup. Maxium 10MB, 1 file could be uploaded.
 * 10MB size limit for profile pic upload.
 
+1.0.2
+* Executive's staff page's document download issue solved.
+
 
 ## Prerequisites:
 I am using VSCode for my development and its integrated terminal. Any IDE and command prompt is enough.

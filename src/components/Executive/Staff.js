@@ -140,7 +140,7 @@ function Staff({ triggerFetch }) {
                         <td>{account.email}</td>
                         <td>
                             {account.document_url 
-                              ?(<a href={ account.document_url } target="_blank" rel="noopener noreferrer" download="document">Document</a>)
+                              ?(<a href={ account.document_url } target="_blank">Document</a>)
                               :(<span>N/A</span>)}<br/>
                         </td>
                         <td>{account.is_active ? 'Approved' : 'Not Approved'}</td>
