@@ -184,7 +184,6 @@ function Appointments({ triggerFetch }) {
                             console.log('Appointment ID: ',appointment.appointment_id)
                             redirectToChat(appointment.appointment_id);
                             }}
-                            disabled={appointment.date !== dayZeroDate}
                             >
                             Chat
                           </Button>

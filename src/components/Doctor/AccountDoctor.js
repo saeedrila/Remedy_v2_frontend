@@ -154,6 +154,8 @@ function AccountDoctor({ triggerFetch }) {
       return;
     }
 
+    setselectedFiles([]);
+
     files.map(file =>
       Object.assign(file, {
         preview: URL.createObjectURL(file),
@@ -379,7 +381,7 @@ function AccountDoctor({ triggerFetch }) {
                           <th scope="row">Document</th>
                           <td>
                             {accountDetails.document_url 
-                              ?(<a href={ accountDetails.document_url} target="_blank" rel="noopener noreferrer" download="document">Document</a>)
+                              ?(<a href={ accountDetails.document_url} target="_blank">Document</a>)
                               :(<span>No document uploaded</span>)}<br/>
                             <Button className='m-2' onClick={() => setDocumentUploadModalShow(true)}>Upload Document</Button>
                           </td>

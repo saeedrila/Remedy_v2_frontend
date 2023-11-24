@@ -165,6 +165,9 @@ function AccountLab({ triggerFetch }) {
       toast.error("File size exceeds the maximum allowed (10MB). Please choose a smaller file.");
       return;
     }
+    // Clears previously selected file
+    setselectedFiles([]);
+
 
     files.map(file =>
       Object.assign(file, {
@@ -394,7 +397,7 @@ function AccountLab({ triggerFetch }) {
                           <th scope="row">Document</th>
                           <td>
                             {accountDetails.document_url 
-                              ?(<a href={ accountDetails.document_url} target="_blank"  rel="noopener noreferrer" download="document">Document</a>)
+                              ?(<a href={ accountDetails.document_url} target="_blank">Document</a>)
                               :(<span>No document uploaded</span>)}<br/>
                           <Button className='m-2' onClick={() => setDocumentUploadModalShow(true)}>Upload Document</Button></td>
                         </tr>

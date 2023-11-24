@@ -42,6 +42,12 @@ Working code (Not all features are tested)
 1.0.2
 * Executive's staff page's document download issue solved.
 
+1.0.3
+* Doctors and Labs can initiate chat with patient on any-day.
+* Doctor and Labs account: When new document is selected, old selected file will be discarded.
+
+
+
 
 ## Prerequisites:
 I am using VSCode for my development and its integrated terminal. Any IDE and command prompt is enough.
