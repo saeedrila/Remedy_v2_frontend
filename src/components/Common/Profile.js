@@ -273,7 +273,7 @@ function Profile() {
         keyboard={false}
       >
         <Modal.Header closeButton>
-          <Modal.Title>Change Password</Modal.Title>
+          <Modal.Title>Reset Password</Modal.Title>
         </Modal.Header>
         <Modal.Body>
         <Container>
@@ -479,7 +479,7 @@ function Profile() {
                         </tr>
                         <tr>
                           <th scope="row">Password</th>
-                          <td><Button className='m-2' onClick={() => setChangePasswordModalShow(true)}>Change Password</Button></td>
+                          <td><Button className='m-2' onClick={() => setChangePasswordModalShow(true)}>Reset Password</Button></td>
                         </tr>
                         <tr>
                           <th scope="row">User Name</th>

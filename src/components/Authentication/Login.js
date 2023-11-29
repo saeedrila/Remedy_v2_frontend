@@ -63,7 +63,16 @@ function Login() {
       localStorage.setItem('profilePicURL', profilePicURL)
       axios.defaults.headers.common['Authorization'] =`Bearer ${accessToken}`;
 
-      navigate(from, {replace: true})
+      if (roles.is_doctor) {
+        navigate('/dashboard-doctor', { replace: true });
+      } else if (roles.is_lab) {
+        navigate('/dashboard-lab', { replace: true });
+      } else if (roles.is_executive) {
+        navigate('/dashboard-executive', { replace: true });
+      } else {
+        navigate(from, { replace: true });
+      }
+
     } catch (error){
       if (error.response?.status === 400){
         toast.error('Email or Password missing');
@@ -134,21 +143,6 @@ function Login() {
                           required
                         />
                       </div>
-
-                      {/* <div className="form-check">
-                        <input
-                          type="checkbox"
-                          className="form-check-input"
-                          id="customControlInline"
-                        />
-                        <label
-                          className="form-check-label"
-                          htmlFor="customControlInline"
-                        >
-                          Remember me
-                        </label>
-                      </div> */}
-
                       <div className="mt-3 d-grid">
                         <button
                           className="btn btn-primary btn-block"
@@ -156,12 +150,6 @@ function Login() {
                         >
                           Log In
                         </button>
-                      </div>
-                      <div className="mt-4 text-center">
-                        <Link to="/forgot-password" className="text-muted">
-                          <i className="mdi mdi-lock me-1" />
-                          Forgot your password?
-                        </Link>
                       </div>
                     </Form>
                   </div>

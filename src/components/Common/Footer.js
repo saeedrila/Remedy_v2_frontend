@@ -23,7 +23,7 @@ const Footer = () => {
               <h1 className="hand-cursor" onClick={() => navigate('/')}>Remedy</h1>
               </div>
             </Col>
-            <Col xs={12} md={3}>
+            {/* <Col xs={12} md={3}>
               <div className="mt-5 text-center hand-cursor" onClick={() => navigate('/sitemap')}>
                 Sitemap
               </div>
@@ -38,7 +38,7 @@ const Footer = () => {
                 </p>
                 <br/>
               </div>
-            </Col>
+            </Col> */}
             <Col xs={12} md={3}>
               <Row>
                 <div className="mt-5 text-center">

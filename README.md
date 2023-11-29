@@ -46,6 +46,11 @@ Working code (Not all features are tested)
 * Doctors and Labs can initiate chat with patient on any-day.
 * Doctor and Labs account: When new document is selected, old selected file will be discarded.
 
+1.0.4
+* Changes made according to bugs raised by project partner in boarding week.
+* Executive, Doctor, and Lab will be automatically redirected to their respective dashboard on logging in.
+* Minor changes in the footer, login page, and Profile page.
+
 
 
 
