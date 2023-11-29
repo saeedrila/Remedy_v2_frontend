@@ -20,9 +20,8 @@ import Header from "./Header";
 import Footer from "./Footer";
 
 // Socket message API endpoint
-const MESSAGE_API = process.env.NODE_ENV === 'production'
-  ? process.env.REACT_APP_WS_MESSAGE_API_PROD
-  : process.env.REACT_APP_WS_MESSAGE_API_DEV;
+const MESSAGE_API = process.env.REACT_APP_WS_MESSAGE_API_PROD
+
 const GET_MY_INBOX_URL = '/my-messages/'
 const GET_DETAILED_MESSAGES = '/get-messages/'
 const AWS_PUBLIC_URL = 'https://remedy-development.s3.ap-south-1.amazonaws.com'
