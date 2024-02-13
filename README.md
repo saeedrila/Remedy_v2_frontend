@@ -54,6 +54,9 @@ Working code (Not all features are tested)
 1.0.5
 * Patients now can cancel appointments. The amount will be refunded to the source.
 
+1.0.6
+* Chat message duplication issue solved.
+
 
 
 

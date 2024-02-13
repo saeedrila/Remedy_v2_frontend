@@ -73,6 +73,9 @@ function Chat() {
   }, [messages]);
 
   const establishConnection = (roomId) =>{
+    if (websocket && websocket.readyState === websocket.OPEN) {
+      return;
+    }
     const client = new W3CWebSocket(`${MESSAGE_API}${roomId}/`);
     console.log("WebSocketComponent mounted");
 
@@ -96,19 +99,24 @@ function Chat() {
         );
     
         if (!isMessageExists) {
-          setMessages((messages) => [
-            ...messages,
-            {
-              id: dataFromServer.id, // Assuming each message has a unique identifier
-              message: dataFromServer.message,
-              sender_profile: dataFromServer.sender === myProfile.id
-                ? myProfile
-                : secondPersonProfile,
-              receiver_profile: dataFromServer.sender === myProfile.id
-                ? secondPersonProfile
-                : myProfile,
-            },
-          ]);
+          const newMessageObj = {
+            id: dataFromServer.id,
+            message: dataFromServer.message,
+            sender_profile: dataFromServer.sender === myProfile.id
+              ? myProfile
+              : secondPersonProfile,
+            receiver_profile: dataFromServer.sender === myProfile.id
+              ? secondPersonProfile
+              : myProfile,
+          };
+        
+          setMessages((messages) => [...messages, newMessageObj]);
+        
+          // Scroll to the bottom after updating the state
+          if (scrollRef.current) {
+            const container = scrollRef.current._container;
+            container.scrollTop = container.scrollHeight;
+          }
         }
       }
       console.log('Message after WS receiving: ', messages)
@@ -171,6 +179,9 @@ function Chat() {
   
   //Use For Chat Box
   const userChatOpen = (roomId, messageSender, messageReciever) => {
+    if (websocket && websocket.readyState === websocket.OPEN) {
+      websocket.close();
+    }
     setCurrentRoomId(roomId);
     getDetailedMessages(messageSender.id, messageReciever.id);
     establishConnection(roomId);
