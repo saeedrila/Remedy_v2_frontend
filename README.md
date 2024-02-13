@@ -51,6 +51,9 @@ Working code (Not all features are tested)
 * Executive, Doctor, and Lab will be automatically redirected to their respective dashboard on logging in.
 * Minor changes in the footer, login page, and Profile page.
 
+1.0.5
+* Patients now can cancel appointments. The amount will be refunded to the source.
+
 
 
 
