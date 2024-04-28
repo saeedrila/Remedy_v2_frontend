@@ -153,6 +153,28 @@ function Login() {
                       </div>
                     </Form>
                   </div>
+                  <div className="p-2">
+                    <div className="mb-3">
+                      <p>Demo credentials:</p>
+                      <ul>
+                        <li>
+                          <strong>Doctor:</strong> <br />
+                          Email: demodoctor@g.com <br />
+                          Password: asdf
+                        </li>
+                        <li>
+                          <strong>Lab:</strong> <br />
+                          Email: demolab@g.com <br />
+                          Password: asdf
+                        </li>
+                        <li>
+                          <strong>Admin (Executive):</strong> <br />
+                          Email: demoexecutive@g.com <br />
+                          Password: asdf
+                        </li>
+                      </ul>
+                    </div>
+                    </div>
                 </CardBody>
               </Card>
               <div className="mt-5 text-center">
