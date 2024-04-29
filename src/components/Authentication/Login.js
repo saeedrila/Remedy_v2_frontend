@@ -160,17 +160,17 @@ function Login() {
                         <li>
                           <strong>Doctor:</strong> <br />
                           Email: demodoctor@g.com <br />
-                          Password: asdf
+                          Password: 12345678
                         </li>
                         <li>
                           <strong>Lab:</strong> <br />
-                          Email: demolab@g.com <br />
-                          Password: asdf
+                          Email: demolab1@g.com <br />
+                          Password: 12345678
                         </li>
                         <li>
                           <strong>Admin (Executive):</strong> <br />
                           Email: demoexecutive@g.com <br />
-                          Password: asdf
+                          Password: 12345678
                         </li>
                       </ul>
                     </div>

@@ -48,8 +48,12 @@ function Staff({ triggerFetch }) {
       toast.success(response.data.detail);
       getAccountForApproval();
     } catch (error) {
-      console.log('Error submitting data', error);
-      toast.error('Error submitting data');
+      if (error.response.status === 403) {
+        toast.error(error.response.data.detail);
+      } else {
+        console.log('Error submitting data', error);
+        toast.error('Error submitting data');
+      }
     }
   };
 

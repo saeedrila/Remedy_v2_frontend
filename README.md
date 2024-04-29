@@ -57,6 +57,10 @@ Working code (Not all features are tested)
 1.0.6
 * Chat message duplication issue solved.
 
+1.0.7
+* Executives cannot block themselves from the platform. No executives can block superuser from platform
+* Demo doctor, lab, admin(executive) creadentials were added to the login page
+
 
 
 
